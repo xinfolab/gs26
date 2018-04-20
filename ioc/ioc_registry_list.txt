@@ -1,0 +1,6 @@
+Microsoft\MediaPlayer\{E6696105-E63E-4EF1-939E-15DDD83B669A}
+Software\Microsoft\ShipTr
+Software\Microsoft\CurrentHalInf
+Software\Microsoft\CurrentPnpSetup
+SYSTEM\ControlSet001\Services\MR
+SYSTEM\ControlSet001\Services\MRxNet\ImagePath
