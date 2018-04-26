@@ -45,13 +45,19 @@ def typography():
 def user():
 	return render_template('user.html')
 
-@app.route('/test', methods=['POST'])
-def json_get():
+@app.route('/reports/<report>', methods=['POST'])
+def get_report(report):
 	content = request.get_json()
 
-	data = content['test']
-	
-	return jsonify({'test' : data})
+	path = os.path.join(os.getcwd(),'report', report)
+	with open(path,'w') as f:
+		f.write(str(content))
+
+	result = 'false'
+	if os.path.exists(path) == True:
+		result = 'sucess'
+
+	return jsonify({"result" : result})
 
 
 @app.route('/update/<filename>', methods=['GET'])
