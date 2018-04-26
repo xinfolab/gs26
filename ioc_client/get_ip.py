@@ -17,18 +17,16 @@ proto_map = {
 
 
 #######
+# 127.0.0.1 은 정상적으로 탐지하는지 확인하기 위한 값
 if GET_IP_TEST is 1:
-    get_ip_test_data = []
-
-    f = open("C:\gs26\ioc\c2.txt", 'r')
-    while True:
-        line = f.readline()
-        if not line: break
-        get_ip_test_data.append(line[:-1])
-
-    f.close()
-
-    #print(get_ip_test_data)
+    get_ip_test_data = [
+        "103.85.226.65",
+        "185.203.116.126",
+        "45.77.49.118",
+        "50.63.202.38",
+        "104.202.173.82",
+        "127.0.0.1"
+    ]
 #######
 
 #######
