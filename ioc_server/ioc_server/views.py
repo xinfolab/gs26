@@ -1,49 +1,49 @@
-from flask import Flask, request, render_template
-
+from flask import request, render_template
+from ioc_server import app
 from flask import Response
 from flask import jsonify
-
 import os
 from werkzeug.datastructures import Headers
+
 
 UPDATE_FOLDER = 'update'
 UPLOAD_FOLDER = 'upload'
 
-app = Flask(__name__)
+# app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
-@app.route('/dashboard')
+@app.route('/dashboard', methods=['GET'])
 def dashboard():
 	return render_template('dashboard.html')
 
-@app.route('/icons')
+@app.route('/icons', methods=['GET'])
 def icons():
 	return render_template('icons.html')
 
-@app.route('/map')
+@app.route('/map', methods=['GET'])
 def map():
 	return render_template('map.html')
 
-@app.route('/tables')
+@app.route('/tables', methods=['GET'])
 def tables():
 	return render_template('tables.html')
 
-@app.route('/upgrade')
+@app.route('/upgrade', methods=['GET'])
 def upgrade():
 	return render_template('upgrade.html')
 
-@app.route('/notifications')
+@app.route('/notifications', methods=['GET'])
 def notifications():
 	return render_template('notifications.html')
 
-@app.route('/typography')
+@app.route('/typography', methods=['GET'])
 def typography():
 	return render_template('typography.html')
 
-@app.route('/user')
+@app.route('/user', methods=['GET'])
 def user():
-	return render_template('user.html')
+	return render_template('user.html', methods=['GET'])
 
 @app.route('/reports/<report>', methods=['POST'])
 def get_report(report):
@@ -77,5 +77,5 @@ def download_file(filename):
 
 	return Response(generate(), mimetype = 'application/octer-stream', headers=headers)
 	
-if __name__ == '__main__':
-	app.run(host='0.0.0.0', debug=True)
+#if __name__ == '__main__':
+#	app.run(host='0.0.0.0', debug=True)
