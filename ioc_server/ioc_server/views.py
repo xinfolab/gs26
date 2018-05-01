@@ -1,16 +1,11 @@
 from flask import request, render_template
-from ioc_server import app
 from flask import Response
 from flask import jsonify
+from ioc_server import app
+from ioc_server import db
+from ioc_server.models import User
 import os
 from werkzeug.datastructures import Headers
-
-
-UPDATE_FOLDER = 'update'
-UPLOAD_FOLDER = 'upload'
-
-# app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 @app.route('/dashboard', methods=['GET'])
@@ -45,6 +40,18 @@ def typography():
 def user():
 	return render_template('user.html', methods=['GET'])
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+	return 1
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+	pass
+
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+	pass
+
 @app.route('/reports/<report>', methods=['POST'])
 def get_report(report):
 	content = request.get_json()
@@ -77,5 +84,20 @@ def download_file(filename):
 
 	return Response(generate(), mimetype = 'application/octer-stream', headers=headers)
 	
-#if __name__ == '__main__':
-#	app.run(host='0.0.0.0', debug=True)
+@app.route('/api/register', methods=['POST'])
+def _register():
+	json_data = request.json
+	user = User(
+		email = json_data['email'],
+		username = json_data['username'],
+		password = json_data['password'],
+		)
+	try:
+		db.session.add(user)
+		db.session.commit()
+		status = 'success'
+	except:
+		status = 'this user is already registerd'
+	db.session.close()
+	return jsonify({'result': status})
+
