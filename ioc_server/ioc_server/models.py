@@ -16,7 +16,7 @@ class User(db.Model):
 		self.email = email
 		self.username = username
 		self.password = bcrypt.generate_password_hash(password)
-		self.regisered_on = datetime.datetime.now()
+		self.registered_on = datetime.datetime.now()
 		self.admin = admin
 
 	def is_authenticated(self):
