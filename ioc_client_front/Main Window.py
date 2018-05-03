@@ -1,101 +1,87 @@
-# -*- coding: utf-8 -*-
+import sys
+from StartKx import Ui_Info
 
-# Form implementation generated from reading ui file 'untitled.ui'
-#
-# Created by: PyQt5 UI code generator 5.10.1
-#
-# WARNING! All changes made in this file will be lost!
-from Processing import Ui_Processing as UI
-from PyQt5.Qt import QCoreApplication
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtWidgets import QWidget, QLabel, QApplication, QPushButton, QTextEdit
+from PyQt5.QtGui import QIcon, QPixmap,QPalette
 
-class Ui_MainWindow(object):
-   
-    def setupUi(self, Dialog): ## GUI 구성
-        Dialog.setObjectName("Main Window")
-        Dialog.resize(548, 515)
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(79, 87, 94))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(79, 87, 94))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(79, 87, 94))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(79, 87, 94))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        Dialog.setPalette(palette)
-        self.label = QtWidgets.QLabel(Dialog)
-        self.label.setGeometry(QtCore.QRect(30, 50, 491, 101))
-        font = QtGui.QFont()
-        font.setFamily("굴림")
-        font.setPointSize(16)
-        self.label.setFont(font)
-        self.label.setObjectName("label")
-        self.label_2 = QtWidgets.QLabel(Dialog)
-        self.label_2.setGeometry(QtCore.QRect(40, 200, 111, 91))
-        font = QtGui.QFont()
-        font.setFamily("굴림체")
-        font.setPointSize(28)
-        self.label_2.setFont(font)
-        self.label_2.setObjectName("label_2")
-        self.pushButton_N = QtWidgets.QPushButton(Dialog)
-        self.pushButton_N.setGeometry(QtCore.QRect(60, 380, 161, 71))
-        font = QtGui.QFont()
-        font.setFamily("Agency FB")
-        font.setPointSize(20)
-        self.pushButton_N.setFont(font)
-        self.pushButton_N.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton_N.setStyleSheet("background-color:yellow")
-        self.pushButton_N.setObjectName("pushButton_N")
-        self.pushButton_Y = QtWidgets.QPushButton(Dialog)
-        self.pushButton_Y.setGeometry(QtCore.QRect(300, 380, 161, 71))
-        font = QtGui.QFont()
-        font.setFamily("Agency FB")
-        font.setPointSize(20)
-        self.pushButton_Y.setFont(font)
-        self.pushButton_Y.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton_Y.setStyleSheet("background-color:brgb(21, 95, 255)")
-        self.pushButton_Y.setObjectName("pushButton_Y")
-        
-              
-        self.pushButton_N.clicked.connect(QCoreApplication.instance().quit) ## Button N - 종료
+class Ui_MainWindow(QWidget):
+  
+    def __init__(self):
+        super().__init__()
+        self.mainUI()
 
-        self.pushButton_Y.clicked.connect(self.mainUI) ## Button Y - 프로그램 시작 (누름과 동시 검사 시작)
-
-    def retranslateUi(self, Dialog): ## Dinamic Language Switchting
-        _translate = QtCore.QCoreApplication.translate
-        QtCore.QMetaObject.connectSlotsByName(Dialog)
-        Dialog.setWindowTitle(_translate("Dialog", "Main Window"))
-        self.label.setText(_translate("Dialog", "A malicous behavior Scanner base on"))
-        self.label_2.setText(_translate("Dialog", "IOC"))
-        self.pushButton_N.setText(_translate("Dialog", "No"))
-        self.pushButton_Y.setText(_translate("Dialog", "Yes"))
-   
     def mainUI(self):
-        xmlf = QtWidgets.QDialog()
-        xmlf.ui = UI()
-        xmlf.ui.setupUi(xmlf)
-        xmlf.exec_()
-        xmlf.show() 
+        self.setGeometry(500, 300, 500, 600)
+        self.setWindowTitle('Kx')
+
+        ### background image and Fixed Size
+        back_label = QLabel(self)
+        back = QPixmap('.\\img\\background.png')
+        back_label.setPixmap(back)
+        self.setFixedSize(back.width(),back.height())
+
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setBold(True)
+
+        ### ID Label, txt
+        ID_Label = QLabel('',self)
+        ID_Label.setText('I D : ')
+        ID_Label.setFont(font) 
+        ID_Label.setStyleSheet("color: white")
+        ID_Label.setFixedSize(50,50)
+        ID_Label.move(50,430)
+
+        ID_txt = QTextEdit('',self)
+        ID_txt.setFixedSize(150,30)
+        ID_txt.move(120,440)
+        ID_txt.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
+
+        ### PW Label, txt
+        PW_Label = QLabel('',self)
+        PW_Label.setText('PW : ')
+        PW_Label.setFont(font)
+        PW_Label.setStyleSheet("color: white")
+        PW_Label.setFixedSize(50,50)
+        PW_Label.move(50,490)
+
+        PW_txt = QTextEdit('',self)
+        PW_txt.setFixedSize(150,30)
+        PW_txt.move(120,500)
+        PW_txt.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
+        
+        ### Sign In Button
+        sin_btn = QPushButton('',self)
+        sin_btn.setText('Sign in')
+        sin_btn.setFixedSize(120,40)
+        sin_btn.move(300,435)
+        sin_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+
+        ### Sign Up Button
+        sup_btn = QPushButton('',self)
+        sup_btn.setText('Sign up')
+        sup_btn.setFixedSize(120,40)
+        sup_btn.move(300,495)
+        sup_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+
+        ###Btn_Clicked
+        sin_btn.clicked.connect(self.sin_btn_clicked)
+###        sup_btn.clicked.connect(self.sup_btn_clicked)
+
+        self.show()
+
+    def sin_btn_clicked(self):
+        self.hide()
+        self.UI = Ui_Info()
+        self.UI.show()
+###    def sup_btn_clicked(self):
+###        UI = Ui_Processing()
+###        UI.exec()
+###        UI.show()
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
     
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    UI = Ui_MainWindow()
     sys.exit(app.exec_())
-
