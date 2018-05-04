@@ -12,16 +12,24 @@ class Ui_Info(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.setGeometry(500, 300, 500, 600)
-        self.setWindowTitle('A Malicious behavior scanner based on IOC')
-        self.setWindowIcon(QIcon('.\\img\\icon.png'))
+        ### remove title bar
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint|QtCore.Qt.WindowStaysOnBottomHint)
 
+        ### background image and Fixed Size
         back_label = QLabel(self)
         back = QPixmap('.\\img\\login.png')
         back_label.setPixmap(back)
         self.setFixedSize(back.width(), back.height())
 
+        close_btn = QPushButton('',self)
+        close_btn.setIcon(QIcon('.\\img\\close_btn.png'))
+        close_btn.setFixedSize(20,20)
+        close_btn.setIconSize(QtCore.QSize(30,30))
+        close_btn.move(back.width()-40,20)
+        close_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        close_btn.clicked.connect(QApplication.instance().quit)
 
+        ### Label
         user_id = QLabel('ID: k3y6reak', self)
         user_id.setFont(QFont('Arial', 20))
         user_id.setStyleSheet('color:white')
@@ -32,15 +40,15 @@ class Ui_Info(QWidget):
         user_ip.move(310, 170)
 
 
+        ### Open Report Button
         rbtn = QPushButton('', self)
-        
         rbtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         rbtn.setIcon(QIcon('.\\img\\report.png'))
         rbtn.setIconSize(QtCore.QSize(500, 100))
         rbtn.setFixedSize(400, 90)
         rbtn.move(60, 300)
 
-        ### btn Search Start
+        ### Search Start Button
         sbtn = QPushButton('', self)
         sbtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         sbtn.setIcon(QIcon('.\\img\\scan.png'))
@@ -51,7 +59,8 @@ class Ui_Info(QWidget):
         ### btn clicked
         rbtn.clicked.connect(self.report_view)
         sbtn.clicked.connect(self.start_search)
-
+    
+    ### Start_search Button -> Processing.py
     def start_search(self):
         self.hide()
         self.UI = Ui_Processing()

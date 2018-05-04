@@ -12,14 +12,22 @@ class Ui_MainWindow(QWidget):
         self.mainUI()
 
     def mainUI(self):
-        self.setGeometry(500, 300, 500, 600)
-        self.setWindowTitle('Kx')
+        ### remove title bar
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint|QtCore.Qt.WindowStaysOnBottomHint)
 
         ### background image and Fixed Size
         back_label = QLabel(self)
         back = QPixmap('.\\img\\background.png')
         back_label.setPixmap(back)
         self.setFixedSize(back.width(),back.height())
+
+        close_btn = QPushButton('',self)
+        close_btn.setIcon(QIcon('.\\img\\close_btn.png'))
+        close_btn.setFixedSize(20,20)
+        close_btn.setIconSize(QtCore.QSize(30,30))
+        close_btn.move(back.width()-40,20)
+        close_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        close_btn.clicked.connect(QApplication.instance().quit)
 
         font = QtGui.QFont()
         font.setPointSize(12)
@@ -59,26 +67,26 @@ class Ui_MainWindow(QWidget):
         sin_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         ### Sign Up Button
-        sup_btn = QPushButton('',self)
-        sup_btn.setText('Sign up')
-        sup_btn.setFixedSize(120,40)
-        sup_btn.move(300,495)
-        sup_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.sup_btn = QPushButton('',self)
+        self.sup_btn.setText('Sign up')
+        self.sup_btn.setFixedSize(120,40)
+        self.sup_btn.move(300,495)
+        self.sup_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         ###Btn_Clicked
         sin_btn.clicked.connect(self.sin_btn_clicked)
-###        sup_btn.clicked.connect(self.sup_btn_clicked)
-
+        self.sup_btn.clicked.connect(self.sup_btn_clicked)
         self.show()
-
+    
+    ### Sign In Button Clicked -> StartKx.GUI
     def sin_btn_clicked(self):
         self.hide()
         self.UI = Ui_Info()
         self.UI.show()
-###    def sup_btn_clicked(self):
-###        UI = Ui_Processing()
-###        UI.exec()
-###        UI.show()
+    def sup_btn_clicked(self):
+        
+        self.sup_btn.setVisible(False)   ##### 불가능
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

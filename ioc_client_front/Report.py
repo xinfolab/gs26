@@ -4,7 +4,7 @@ import time
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QDialog, QLabel, QApplication, QPushButton
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QPixmap
 
 class Ui_Report(QDialog):
   
@@ -13,9 +13,23 @@ class Ui_Report(QDialog):
         self.ReportUI()
 
     def ReportUI(self):
-        self.setGeometry(1000,500,800,600)
-        self.setWindowTitle('Kx')
-        self.setStyleSheet("background-color: brgb(33, 33, 33)")
+        ### remove title bar
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint|QtCore.Qt.WindowStaysOnBottomHint)
+
+        ### background image and Fixed Size
+        back_label = QLabel(self)
+        back = QPixmap('.\\img\\33_back.png')
+        back_label.setPixmap(back)
+        self.setFixedSize(back.width(),back.height())
+
+        ### Close Button
+        close_btn = QPushButton('',self)
+        close_btn.setIcon(QIcon('.\\img\\close_btn.png'))
+        close_btn.setFixedSize(20,20)
+        close_btn.setIconSize(QtCore.QSize(30,30))
+        close_btn.move(back.width()-40,20)
+        close_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        close_btn.clicked.connect(QApplication.instance().quit)
 
         font = QtGui.QFont()
         font.setPointSize(50)
@@ -56,6 +70,20 @@ class Ui_Report(QDialog):
         ttime_Label.setFont(font)
         ttime_Label.setStyleSheet("color : white")
         ttime_Label.move(650,50)
+
+        self.tabWidget = QtWidgets.QTabWidget(self)
+        self.tabWidget.setGeometry(QtCore.QRect(50, 200, 700, 350))
+        self.tabWidget.setObjectName("tabWidget")
+        self.tab = QtWidgets.QWidget()
+        self.tabWidget.addTab(self.tab, "All")
+        self.tab_2 = QtWidgets.QWidget()
+        self.tabWidget.addTab(self.tab_2, "File")
+        self.tab_3 = QtWidgets.QWidget()
+        self.tabWidget.addTab(self.tab_3, "Registry")
+        self.tab_4 = QtWidgets.QWidget()
+        self.tabWidget.addTab(self.tab_4, "Network")
+        self.tab_5 = QtWidgets.QWidger()
+        self.tabWidget.addTab(self.tab_5, "Process")
 
 
 if __name__ == '__main__':
