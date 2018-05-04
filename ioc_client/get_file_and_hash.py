@@ -3,16 +3,21 @@ import wmi
 import os
 import re
 import sys
+import hashpkg
 
 enc = sys.stdin.encoding
 c = wmi.WMI()
 data = open('ioc_file_list.txt', 'rb').readlines()
 
+def compare_ioc_hash(hash_value):
+    if re.search(hash_value, open('ioc_hash_list.txt').read(), re.IGNORECASE):
+        print(hash_value)
+
 def compare_ioc_file(file_name, full_filename):
     file_name = file_name.encode(enc)
     try:
         if file_name+b"\r\n" in data:
-            print(full_filename)
+            return True
     except:
         pass
 
@@ -21,11 +26,18 @@ def file_search(disk):
         filenames = os.listdir(disk)
         for filename in filenames:
             full_filename = os.path.join(disk, filename)
-            compare_ioc_file(filename, full_filename)
             if os.path.isdir(full_filename):
                 file_search(full_filename)
             else:
-                ext = os.path.splitext(full_filename)[-1]
+                file_flag = compare_ioc_file(filename, full_filename)
+                if file_flag == True:
+                    hs = hashpkg.hash_calc()
+                    md5_hash = hs.get_md5_hash(full_filename)
+                    compare_ioc_hash(md5_hash)
+                    sha1_hash = hs.get_sha1_hash(full_filename)
+                    compare_ioc_hash(sha1_hash)
+                    sha256_hash = hs.get_sha256_hash(full_filename)
+                    compare_ioc_hash(sha256_hash)
     except:
         pass
 
