@@ -1,4 +1,6 @@
 import sys
+from PyQt5 import QtWidgets
+import threading
 import time
 
 from PyQt5 import QtGui
@@ -29,7 +31,7 @@ class Ui_Report(QDialog):
         close_btn.setIconSize(QtCore.QSize(30,30))
         close_btn.move(back.width()-40,20)
         close_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        close_btn.clicked.connect(QApplication.instance().quit)
+        close_btn.clicked.connect(self.close_window)
 
         font = QtGui.QFont()
         font.setPointSize(50)
@@ -53,11 +55,10 @@ class Ui_Report(QDialog):
         Uname_Label.setFixedSize(300,100)
         Uname_Label.move(220,0)
         
-        ### Time Label Threading 구현 예정
+        ### Time Label 
         font.setPointSize(12)
         now = time.localtime()
         t_date = "%04d.%02d.%02d" % (now.tm_year, now.tm_mon, now.tm_mday)
-        t_time = "   %02d:%02d:%02d" % (now.tm_hour, now.tm_min, now.tm_sec)
 
         tdate_Label = QLabel('',self)
         tdate_Label.setText(t_date)
@@ -65,11 +66,10 @@ class Ui_Report(QDialog):
         tdate_Label.setStyleSheet("color : white")
         tdate_Label.move(650,20)
 
-        ttime_Label = QLabel('',self)
-        ttime_Label.setText(t_time)
-        ttime_Label.setFont(font)
-        ttime_Label.setStyleSheet("color : white")
-        ttime_Label.move(650,50)
+        self.ttime_Label = QLabel('',self)
+        self.ttime_Label.setFont(font)
+        self.ttime_Label.setStyleSheet("color : white")
+        self.ttime_Label.move(650,50)
 
         self.tabWidget = QtWidgets.QTabWidget(self)
         self.tabWidget.setGeometry(QtCore.QRect(50, 200, 700, 350))
@@ -82,9 +82,21 @@ class Ui_Report(QDialog):
         self.tabWidget.addTab(self.tab_3, "Registry")
         self.tab_4 = QtWidgets.QWidget()
         self.tabWidget.addTab(self.tab_4, "Network")
-        self.tab_5 = QtWidgets.QWidger()
+        self.tab_5 = QtWidgets.QWidget()
         self.tabWidget.addTab(self.tab_5, "Process")
+        self.show_Time()
+        self.show()
+    
+    def show_Time(self):
+        now = time.localtime()
+        t_time = "   %02d:%02d:%02d" % (now.tm_hour, now.tm_min, now.tm_sec)
+        self.ttime_Label.setText(t_time)
+        self.timer = threading.Timer(1,self.show_Time)
+        self.timer.start()
 
+    def close_window(self):
+        self.timer.cancel()
+        exit()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
