@@ -2,11 +2,11 @@ import sys
 import webbrowser
 
 from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import QWidget, QLabel, QApplication, QPushButton
+from PyQt5.QtWidgets import QDialog, QLabel, QApplication, QPushButton
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 from Processing import Ui_Processing
 
-class Ui_Info(QWidget):
+class Ui_Info(QDialog):
 
     def __init__(self):
         super().__init__()
@@ -76,4 +76,3 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     iv = Ui_Info()
     sys.exit(app.exec_())
-
