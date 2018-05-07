@@ -25,10 +25,21 @@
         Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
     -->
             <div class="logo">
-                <a href="http://117.16.11.8:8888/" class="simple-text logo-mini">
+                <a href="http://117.16.11.8:8888" class="simple-text logo-mini">
                     26
                 </a>
                 <a href="http://117.16.11.8:8888" class="simple-text logo-normal">
                     GS26
                 </a>
             </div>
+            <div class="sidebar-wrapper" ng-controller="menuController">
+                <ul class="nav" ng-repeat="menu in menus">
+                    <li ng-class="activeClass(menu.url)">
+                        <a href="/{{ '{{menu.url}}' }}">
+                            <i class="now-ui-icons {{ '{{menu.class}}' }}"></i>
+                            <p>{{ '{{menu.name}}' }}</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>

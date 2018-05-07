@@ -21,9 +21,9 @@ function login(email, password) {
         user = false;
         deferred.reject();
       }
-    },
+    })
     // handle error
-    function (data) {
+    .catch(function (data) {
       user = false;
       deferred.reject();
     });
@@ -31,6 +31,39 @@ function login(email, password) {
   // return promise object
   return deferred.promise;
 
+}
+
+function register(email, username, password, password_confirm) {
+
+  // create a new instance of deferred
+  var deferred = $q.defer();
+
+  // send a post request to the server
+  $http.post('/api/register', {email: email, username: username, password: password, password_confirm: password_confirm})
+    // handle success
+    .then(function (data, status) {
+      if(status === 200 && data.result){
+        deferred.resolve();
+      } else {
+        deferred.reject();
+      }
+    })
+    // handle error
+    .catch(function (data) {
+      deferred.reject();
+    });
+
+  // return promise object
+  return deferred.promise;
+
+}
+
+function isLoggedIn() {
+  if(user) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function logout() {
@@ -55,42 +88,6 @@ function logout() {
   return deferred.promise;
 
 }
-
-function register(email, password) {
-
-  // create a new instance of deferred
-  var deferred = $q.defer();
-
-  // send a post request to the server
-  $http.post('/api/register', {email: email, password: password})
-    // handle success
-    .then(function (data, status) {
-      if(status === 200 && data.result){
-        deferred.resolve();
-      } else {
-        deferred.reject();
-      }
-    },
-    // handle error
-    function (data) {
-      deferred.reject();
-    });
-
-  // return promise object
-  return deferred.promise;
-
-}
-
-function isLoggedIn() {
-  if(user) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-
-
     // return available functions for use in controllers
     return ({
       isLoggedIn: isLoggedIn,
@@ -100,3 +97,4 @@ function isLoggedIn() {
     });
 
 }]);
+
