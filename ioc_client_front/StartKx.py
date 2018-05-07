@@ -1,12 +1,13 @@
 import sys
 import webbrowser
-from Processing import Ui_Processing
 
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import QWidget, QLabel, QApplication, QPushButton
 from PyQt5.QtGui import QIcon, QPixmap, QFont
+from Processing import Ui_Processing
 
 class Ui_Info(QWidget):
+
     def __init__(self):
         super().__init__()
         self.initUI()
@@ -21,6 +22,7 @@ class Ui_Info(QWidget):
         back_label.setPixmap(back)
         self.setFixedSize(back.width(), back.height())
 
+        ### close Button
         close_btn = QPushButton('',self)
         close_btn.setIcon(QIcon('.\\img\\close_btn.png'))
         close_btn.setFixedSize(20,20)
@@ -60,7 +62,7 @@ class Ui_Info(QWidget):
         rbtn.clicked.connect(self.report_view)
         sbtn.clicked.connect(self.start_search)
     
-    ### Start_search Button -> Processing.py
+    ### start_search click
     def start_search(self):
         self.hide()
         self.UI = Ui_Processing()

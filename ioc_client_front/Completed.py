@@ -1,10 +1,9 @@
 import sys
-from Report import Ui_Report
 
-from PyQt5 import QtGui
-from PyQt5 import QtCore
+from PyQt5 import QtGui, QtCore
 from PyQt5.QtWidgets import QDialog, QLabel, QApplication, QPushButton
 from PyQt5.QtGui import QIcon, QPixmap
+from Report import Ui_Report
 
 class Ui_completed(QDialog):
   

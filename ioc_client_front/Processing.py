@@ -1,11 +1,10 @@
 import sys
-from Completed import Ui_completed
 
-from PyQt5 import QtWidgets
-from PyQt5 import QtGui
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QWidget, QLabel, QApplication, QPushButton, QDialog
+from PyQt5 import QtGui, QtCore, QtWidgets
+from PyQt5.QtWidgets import QLabel, QApplication, QPushButton, QDialog
 from PyQt5.QtGui import QPixmap, QIcon
+from Completed import Ui_completed
+from GotoTray import GoTrayUI
 
 class Ui_Processing(QDialog):
 
@@ -26,19 +25,18 @@ class Ui_Processing(QDialog):
         self.setFixedSize(back.width(),back.height())
         
         ### close Button
-        close_btn = QPushButton('',self)
-        close_btn.setIcon(QIcon('.\\img\\close_btn.png'))
-        close_btn.setFixedSize(20,20)
-        close_btn.setIconSize(QtCore.QSize(30,30))
-        close_btn.move(back.width()-40,20)
-        close_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        close_btn.clicked.connect(QApplication.instance().quit)
+        self.close_Btn = QPushButton('',self)
+        self.close_Btn.setIcon(QIcon('.\\img\\close_Btn.png'))
+        self.close_Btn.setFixedSize(20,20)
+        self.close_Btn.setIconSize(QtCore.QSize(30,30))
+        self.close_Btn.move(back.width()-40,20)
+        self.close_Btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         ### GIF set
         self.moviee = QLabel(self)
         self.movie = QtGui.QMovie(".\\img\\Processing.gif")
         self.moviee.setMovie(self.movie)
-        self.moviee.setGeometry(50,50,300,100)
+        self.moviee.setGeometry(50,28,320,150)
         self.movie.start()     
 
         ### Pause Button
@@ -47,8 +45,7 @@ class Ui_Processing(QDialog):
         self.P_btn.setIconSize(QtCore.QSize(170,90))
         self.P_btn.setFixedSize(150,70)
         self.P_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-
-        self.P_btn.move(420,50)
+        self.P_btn.move(420,60)
 
         ### Continue Button
         self.C_btn = QPushButton('',self)
@@ -56,7 +53,7 @@ class Ui_Processing(QDialog):
         self.C_btn.setIconSize(QtCore.QSize(170,90))
         self.C_btn.setFixedSize(150,70)
         self.C_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.C_btn.move(420,50)
+        self.C_btn.move(420,60)
 
         ### Cancel Button
         self.Can_btn = QPushButton('',self)
@@ -64,7 +61,7 @@ class Ui_Processing(QDialog):
         self.Can_btn.setIconSize(QtCore.QSize(170,90))
         self.Can_btn.setFixedSize(150,70)
         self.Can_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.Can_btn.move(600,50)
+        self.Can_btn.move(600,60)
 
         ### Start Button
 
@@ -73,7 +70,7 @@ class Ui_Processing(QDialog):
         self.S_btn.setIconSize(QtCore.QSize(170,90))
         self.S_btn.setFixedSize(150,70)
         self.S_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.S_btn.move(600,50)
+        self.S_btn.move(600,60)
 
         ### hide btn P & S
         self.C_btn.setVisible(False)
@@ -98,6 +95,8 @@ class Ui_Processing(QDialog):
         self.C_btn.clicked.connect(self.C_btn_clicked)
         self.Can_btn.clicked.connect(self.Can_btn_clicked)
         self.S_btn.clicked.connect(self.S_btn_clicked)
+        self.close_Btn.clicked.connect(self.close_Btn_clicked)
+
 
         self.show()
 
@@ -105,20 +104,32 @@ class Ui_Processing(QDialog):
     def P_btn_clicked(self):
         self.P_btn.setVisible(False)
         self.C_btn.setVisible(True)
+        self.movie.stop()     
 
     def C_btn_clicked(self):
         self.C_btn.setVisible(False)
         self.P_btn.setVisible(True)
+        self.movie.start()     
 
-    def Can_btn_clicked(self,state):
+    def Can_btn_clicked(self):
         self.Can_btn.setVisible(False)
         self.S_btn.setVisible(True)
         self.P_btn.setVisible(False)
+        self.C_btn.setVisible(False)
+        self.movie.stop()     
 
-    def S_btn_clicked(self,state):
+    def S_btn_clicked(self):
         self.S_btn.setVisible(False)
-        self.Can_btn.setVisible(True)
         self.P_btn.setVisible(True)
+        self.C_btn.setVisible(False)
+        self.Can_btn.setVisible(True)
+        self.movie.start()     
+
+    ### Close_Btn_clicked = Go Tray or Exit
+    def close_Btn_clicked(self):
+
+        self.UI = GoTrayUI()
+        self.UI.show()
 
 ###    def search completed then open Completed GUI
 ###        self.hide()

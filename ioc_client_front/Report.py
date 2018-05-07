@@ -1,10 +1,7 @@
 import sys
-from PyQt5 import QtWidgets
-import threading
-import time
+import threading,time
 
-from PyQt5 import QtGui
-from PyQt5 import QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtWidgets import QDialog, QLabel, QApplication, QPushButton
 from PyQt5.QtGui import QIcon, QPixmap
 
@@ -55,7 +52,7 @@ class Ui_Report(QDialog):
         Uname_Label.setFixedSize(300,100)
         Uname_Label.move(220,0)
         
-        ### Time Label 
+        ### Date Label 
         font.setPointSize(12)
         now = time.localtime()
         t_date = "%04d.%02d.%02d" % (now.tm_year, now.tm_mon, now.tm_mday)
@@ -66,11 +63,13 @@ class Ui_Report(QDialog):
         tdate_Label.setStyleSheet("color : white")
         tdate_Label.move(650,20)
 
+        ### time Label
         self.ttime_Label = QLabel('',self)
         self.ttime_Label.setFont(font)
         self.ttime_Label.setStyleSheet("color : white")
         self.ttime_Label.move(650,50)
 
+        ### tabWidget set
         self.tabWidget = QtWidgets.QTabWidget(self)
         self.tabWidget.setGeometry(QtCore.QRect(50, 200, 700, 350))
         self.tabWidget.setObjectName("tabWidget")
@@ -87,6 +86,7 @@ class Ui_Report(QDialog):
         self.show_Time()
         self.show()
     
+    ### get current time
     def show_Time(self):
         now = time.localtime()
         t_time = "   %02d:%02d:%02d" % (now.tm_hour, now.tm_min, now.tm_sec)
