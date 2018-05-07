@@ -1,10 +1,14 @@
-from flask import request, render_template
+from flask import request
 from flask import Response
+from flask import render_template
 from flask import jsonify
+from flask import session
 from ioc_server import app
 from ioc_server import db
+from ioc_server import bcrypt
 from ioc_server.models import User
 import os
+import re
 from werkzeug.datastructures import Headers
 
 @app.route('/')
@@ -40,18 +44,6 @@ def typography():
 def user():
 	return render_template('user.html', methods=['GET'])
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-	return 1
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-	pass
-
-@app.route('/logout', methods=['GET', 'POST'])
-def logout():
-	pass
-
 @app.route('/reports/<report>', methods=['POST'])
 def get_report(report):
 	content = request.get_json()
@@ -85,8 +77,16 @@ def download_file(filename):
 	return Response(generate(), mimetype = 'application/octer-stream', headers=headers)
 	
 @app.route('/api/register', methods=['POST'])
-def _register():
+def register():
 	json_data = request.json
+	print(json_data['password'])
+	if json_data['password'] == 'a':
+		return jsonify({'result': 'password_empty'})
+	elif json_data['password'] != json_data['password_confirm']:
+		return jsonify({'result': 'confirm_failed'})
+	elif not(re.findall("(.*\@.*\..*)", json_data['email'])):
+		return jsonify({'result': 'email_failed'})
+
 	user = User(
 		email = json_data['email'],
 		username = json_data['username'],
@@ -101,3 +101,18 @@ def _register():
 	db.session.close()
 	return jsonify({'result': status})
 
+@app.route('/api/login', methods=['POST'])
+def login():
+	json_data = request.json
+	user = User.query.filter_by(email=json_data['email']).first()
+	if user and bcrypt.check_password_hash(user.password, json_data['password']):
+		session['logged_in'] = True
+		status = True
+	else:
+		status = False
+	return jsonify({'result': status})
+
+@app.route('/api/logout')
+def logout():
+	session.pop('logged_in', None)
+	return jsonify({'result': 'success'})
