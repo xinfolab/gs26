@@ -2,6 +2,7 @@ angular.module('myApp').controller('menuController',
   ['$scope', '$location',
   function ($scope, $location){
     var currentPath = $location.absUrl();
+
     $scope.test = "1234";
     $scope.menus = [{
       'name': 'dashboard',
@@ -39,6 +40,10 @@ angular.module('myApp').controller('menuController',
       'class': 'text_caps-small',
     }
     ];
+    for(i=0; i<$scope.menus.length; i++){
+      if(currentPath.includes($scope.menus[i].url))
+        $scope.currentMenu = $scope.menus[i].name;
+    }
     $scope.activeClass = function(pMenu){
       if(currentPath.includes(pMenu)){
         return "active";
@@ -93,6 +98,7 @@ angular.module('myApp').controller('registerController',
         $scope.registerForm.password_confirm)
         // handle success
         .then(function () {
+          $scope.error = false;
           $location.path('/login');
           $scope.disabled = false;
           $scope.registerForm = {};

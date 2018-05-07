@@ -83,8 +83,8 @@ def register():
 		return jsonify({'result': 'password is empty'})
 	elif json_data['password'] != json_data['password_confirm']:
 		return jsonify({'result': 'please check password_confirm'})
-	username = User.query.filter_by(username=json_data['username']).first()
-	if username:
+	uname = User.query.filter_by(username=json_data['username']).first()
+	if uname:
 		return jsonify({'result': 'username duplicated'})
 
 	user = User(
