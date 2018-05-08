@@ -36,5 +36,8 @@ class User(db.Model):
 	def get_id(self):
 		return self.id
 
+	def get_token(self):
+		return self.token
+
 	def __repr__(self):
 		return '<User {0}>'.format(self.email)

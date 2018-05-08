@@ -10,6 +10,7 @@ from ioc_server import bcrypt
 from ioc_server.models import User
 import os
 import re
+import json
 from werkzeug.datastructures import Headers
 
 @app.route('/')
@@ -136,8 +137,9 @@ def register():
 		db.session.add(user)
 		db.session.commit()
 		status = 'success'
-		print('success')
-	except:
+		os.mkdir(os.path.join('./ioc_server/reports', user.get_token()))
+	except Exception as e:
+		print(e)
 		status = 'this user is already registerd'
 	db.session.close()
 	return jsonify({'result': status})
@@ -168,3 +170,15 @@ def status():
 	        return jsonify({'status': False})
 	except:
 		return jsonify({'status': False})
+
+@app.route('/api/getreport', methods=['POST'])
+def getreport():
+	json_data = request.json
+	user = User.query.filter_by(username=json_data['username']).first()
+	report_dir = './ioc_server/reports/'+user.token+'/'
+	report_list = os.listdir(report_dir)
+	result = {}
+	for i in range(len(report_list)):
+		result.update({str(i+1): report_list[i],})
+
+	return jsonify(result)
