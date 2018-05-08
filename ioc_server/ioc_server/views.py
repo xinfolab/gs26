@@ -17,17 +17,17 @@ from werkzeug.datastructures import Headers
 def signin():
 	try:
 		if session['logged_in'] == True:
-			return redirect('/dashboard', code=302)
+			return redirect('/report', code=302)
 		return render_template('signin.html')
 	except:
 		return render_template('signin.html')
 
-@app.route('/dashboard', methods=['GET'])
-def dashboard():
+@app.route('/report', methods=['GET'])
+def report():
 	try:
 		if session['logged_in'] == False:
 			return redirect('/signin', code=302)
-		return render_template('dashboard.html')
+		return render_template('report.html')
 	except:
 		return render_template('signin.html')
 
@@ -62,12 +62,12 @@ def tables():
 def upgrade():
 	return render_template('upgrade.html')
 
-@app.route('/notifications', methods=['GET'])
-def notifications():
+@app.route('/notice', methods=['GET'])
+def notice():
 	try:
 		if session['logged_in'] == False:
 			return redirect('/signin', code=302)
-		return render_template('notifications.html')
+		return render_template('notice.html')
 	except:
 		return render_template('signin.html')
 

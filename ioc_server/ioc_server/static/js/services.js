@@ -46,6 +46,7 @@ function register(email, username, password, password_confirm) {
       if(response.status === 200 && response.data['result']=='success'){
         deferred.resolve();
       } else {
+        demo.regFailed('top', 'center', response.data['result']);
         deferred.reject();
       }
     })

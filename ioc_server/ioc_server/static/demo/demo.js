@@ -479,12 +479,12 @@ demo = {
         });
   },
 
-  loginNeed: function(from, align){
-      color = 'alert-info';
+  regFailed: function(from, align, msg){
+      color = 'primary';
 
       $.notify({
           icon: "now-ui-icons ui-1_bell-53",
-          message: "Login Please"
+          message: msg
 
         },{
             type: color,
@@ -494,6 +494,6 @@ demo = {
                 align: align
             }
         });
-  }
+  },
 
 };

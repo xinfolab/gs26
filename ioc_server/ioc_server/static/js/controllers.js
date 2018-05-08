@@ -4,8 +4,8 @@ angular.module('myApp').controller('menuController',
     var currentPath = $location.absUrl();
 
     $scope.menus = [{
-      'name': 'dashboard',
-      'url': 'dashboard',
+      'name': 'report',
+      'url': 'report',
       'class': 'design_app',
     },
     {
@@ -19,8 +19,8 @@ angular.module('myApp').controller('menuController',
       'class': 'location_map-big',
     },
     {
-      'name': 'notifications',
-      'url': 'notifications',
+      'name': 'notice',
+      'url': 'notice',
       'class': 'ui-1_bell-53',
     },
     {
