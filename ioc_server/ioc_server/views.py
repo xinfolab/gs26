@@ -79,13 +79,13 @@ def download_file(filename):
 @app.route('/api/register', methods=['POST'])
 def register():
 	json_data = request.json
-	print(json_data['password'])
-	if json_data['password'] == 'a':
-		return jsonify({'result': 'password_empty'})
+	if json_data['password'] == '':
+		return jsonify({'result': 'password is empty'})
 	elif json_data['password'] != json_data['password_confirm']:
-		return jsonify({'result': 'confirm_failed'})
-	elif not(re.findall("(.*\@.*\..*)", json_data['email'])):
-		return jsonify({'result': 'email_failed'})
+		return jsonify({'result': 'please check password_confirm'})
+	uname = User.query.filter_by(username=json_data['username']).first()
+	if uname:
+		return jsonify({'result': 'username duplicated'})
 
 	user = User(
 		email = json_data['email'],

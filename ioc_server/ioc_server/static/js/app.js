@@ -21,3 +21,8 @@ myApp.config(function ($routeProvider) {
       redirectTo: '/'
     });
 });
+
+//myApp.config(function($interpolateProvider){
+//        $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+//    }
+//);

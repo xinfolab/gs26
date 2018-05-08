@@ -1,7 +1,7 @@
 {% include 'header.html' %}
             <div class="sidebar-wrapper">
-                <ul class="nav">
-                    <li>
+                <ul class="nav" ng-controller="menuController">
+                    <li ng-class="currentPath">
                         <a href="/dashboard">
                             <i class="now-ui-icons design_app"></i>
                             <p>Dashboard</p>
@@ -25,8 +25,8 @@
                             <p>Notifications</p>
                         </a>
                     </li>
-                    <li>
-                        <a href="/user">
+                    <li class="active">
+                        <a href="/user#!/register">
                             <i class="now-ui-icons users_single-02"></i>
                             <p>User Profile</p>
                         </a>
@@ -43,7 +43,7 @@
                             <p>Typography</p>
                         </a>
                     </li>
-                    <li class="active active-pro">
+                    <li class="active-pro">
                         <a href="/upgrade">
                             <i class="now-ui-icons arrows-1_cloud-download-93"></i>
                             <p>Upgrade to PRO</p>
