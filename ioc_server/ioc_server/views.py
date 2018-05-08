@@ -14,6 +14,9 @@ import json
 from werkzeug.datastructures import Headers
 
 @app.route('/')
+def main():
+	return render_template('main.html')
+	
 @app.route('/signin', methods=['GET'])
 def signin():
 	try:
@@ -83,7 +86,12 @@ def typography():
 
 @app.route('/signup', methods=['GET'])
 def signup():
-	return render_template('signup.html')
+	try:
+		if session['logged_in'] == True:
+			return redirect('/report', code=302)
+		return render_template('signup.html')
+	except:
+		return render_template('signup.html')
 
 @app.route('/reports/<report>', methods=['POST'])
 def get_report(report):

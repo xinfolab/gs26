@@ -77,11 +77,13 @@ function logout() {
   $http.get('/api/logout')
     // handle success
     .then(function (response) {
+      demo.logoutSuccess('top','center', "TestUser");
       user = false;
       deferred.resolve();
     },
     // handle error
     function (response) {
+      demo.logoutSuccess('top','center', "TestUser");
       user = false;
       deferred.reject();
     });

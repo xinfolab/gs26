@@ -129,6 +129,7 @@ angular.module('myApp').controller('logoutController',
       AuthService.logout()
         .then(function () {
           $location.path('/login');
+          window.setTimeout("location.reload();", 2000);
         });
     };
 

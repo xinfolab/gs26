@@ -496,4 +496,20 @@ demo = {
         });
   },
 
+  logoutSuccess: function(from, align, msg){
+      color = 'success';
+
+      $.notify({
+          icon: "now-ui-icons ui-1_bell-53",
+          message: msg + ", GoodBye!"
+
+        },{
+            type: color,
+            timer: 100,
+            placement: {
+                from: from,
+                align: align
+            }
+        });
+  }
 };
