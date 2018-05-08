@@ -3,7 +3,6 @@ import sys
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtWidgets import QLabel, QApplication, QPushButton, QDialog
 from PyQt5.QtGui import QPixmap, QIcon
-from Completed import Ui_completed
 from GotoTray import GoTrayUI
 
 class Ui_Processing(QDialog):
