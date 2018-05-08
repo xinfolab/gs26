@@ -477,6 +477,23 @@ demo = {
                 align: align
             }
         });
+  },
+
+  loginNeed: function(from, align){
+      color = 'alert-info';
+
+      $.notify({
+          icon: "now-ui-icons ui-1_bell-53",
+          message: "Login Please"
+
+        },{
+            type: color,
+            timer: 100,
+            placement: {
+                from: from,
+                align: align
+            }
+        });
   }
 
 };

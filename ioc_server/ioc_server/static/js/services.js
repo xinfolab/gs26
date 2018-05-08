@@ -61,7 +61,6 @@ function register(email, username, password, password_confirm) {
 
 function isLoggedIn() {
   if(user) {
-    $location.path('/login');
     return true;
   } else {
     return false;
@@ -76,12 +75,12 @@ function logout() {
   // send a get request to the server
   $http.get('/api/logout')
     // handle success
-    .then(function (data) {
+    .then(function (response) {
       user = false;
       deferred.resolve();
     },
     // handle error
-    function (data) {
+    function (response) {
       user = false;
       deferred.reject();
     });
@@ -90,12 +89,30 @@ function logout() {
   return deferred.promise;
 
 }
+
+function getUserStatus() {
+  return $http.get('/api/status')
+  // handle success
+  .then(function (response) {
+    if(response.data['status']){
+      user = true;
+    } else {
+      user = false;
+    }
+  },
+  // handle error
+  function (response) {
+    user = false;
+  });
+}
+
     // return available functions for use in controllers
     return ({
       isLoggedIn: isLoggedIn,
       login: login,
       logout: logout,
-      register: register
+      register: register,
+      getUserStatus: getUserStatus
     });
 
 }]);

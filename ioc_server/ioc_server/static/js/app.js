@@ -2,22 +2,33 @@ myApp.config(function ($routeProvider) {
   $routeProvider
     .when('/login', {
       templateUrl: "static/partials/login.html",
-      controller: 'loginController'
+      controller: 'loginController',
+      access: {restricted: false}
     })
     .when('/logout', {
-      controller: 'logoutController'
+      controller: 'logoutController',
+      access: {restricted: true}
     })
     .when('/register', {
       templateUrl: "static/partials/register.html",
-      controller: 'registerController'
-    })
-    .when('/one', {
-      template: '<h1>This is page one!</h1>'
-    })
-    .when('/two', {
-      template: '<h1>This is page two!</h1>'
+      controller: 'registerController',
+      access: {restricted: false}
     })
     .otherwise({
-      redirectTo: '/'
+      redirectTo: '/',
+      access: {restricted: true}
     });
+});
+
+myApp.run(function ($rootScope, $location, $route, AuthService) {
+  $rootScope.$on('$routeChangeStart',
+    function (event, next, current) {
+      AuthService.getUserStatus()
+      .then(function(){
+        if (next.access.restricted && !AuthService.isLoggedIn()){
+          $location.path('/login');
+          $route.reload();
+        }
+      });
+  });
 });

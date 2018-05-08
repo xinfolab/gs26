@@ -3,6 +3,7 @@ from flask import Response
 from flask import render_template
 from flask import jsonify
 from flask import session
+from flask import redirect
 from ioc_server import app
 from ioc_server import db
 from ioc_server import bcrypt
@@ -12,21 +13,50 @@ import re
 from werkzeug.datastructures import Headers
 
 @app.route('/')
+@app.route('/signin', methods=['GET'])
+def signin():
+	try:
+		if session['logged_in'] == True:
+			return redirect('/dashboard', code=302)
+		return render_template('signin.html')
+	except:
+		return render_template('signin.html')
+
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
-	return render_template('dashboard.html')
+	try:
+		if session['logged_in'] == False:
+			return redirect('/signin', code=302)
+		return render_template('dashboard.html')
+	except:
+		return render_template('signin.html')
 
 @app.route('/icons', methods=['GET'])
 def icons():
-	return render_template('icons.html')
+	try:
+		if session['logged_in'] == False:
+			return redirect('/signin', code=302)
+		return render_template('icons.html')
+	except:
+		return render_template('signin.html')
 
 @app.route('/map', methods=['GET'])
 def map():
-	return render_template('map.html')
+	try:
+		if session['logged_in'] == False:
+			return redirect('/signin', code=302)
+		return render_template('map.html')
+	except:
+		return render_template('signin.html')
 
 @app.route('/tables', methods=['GET'])
 def tables():
-	return render_template('tables.html')
+	try:
+		if session['logged_in'] == False:
+			return redirect('/signin', code=302)
+		return render_template('tables.html')
+	except:
+		return render_template('signin.html')
 
 @app.route('/upgrade', methods=['GET'])
 def upgrade():
@@ -34,15 +64,25 @@ def upgrade():
 
 @app.route('/notifications', methods=['GET'])
 def notifications():
-	return render_template('notifications.html')
+	try:
+		if session['logged_in'] == False:
+			return redirect('/signin', code=302)
+		return render_template('notifications.html')
+	except:
+		return render_template('signin.html')
 
 @app.route('/typography', methods=['GET'])
 def typography():
-	return render_template('typography.html')
+	try:
+		if session['logged_in'] == False:
+			return redirect('/signin', code=302)
+		return render_template('typography.html')
+	except:
+		return render_template('signin.html')
 
-@app.route('/user', methods=['GET'])
-def user():
-	return render_template('user.html', methods=['GET'])
+@app.route('/signup', methods=['GET'])
+def signup():
+	return render_template('signup.html')
 
 @app.route('/reports/<report>', methods=['POST'])
 def get_report(report):
@@ -117,3 +157,14 @@ def login():
 def logout():
 	session.pop('logged_in', None)
 	return jsonify({'result': 'success'})
+
+@app.route('/api/status', methods=['GET'])
+def status():
+	try:
+	    if session.get('logged_in'):
+	        if session['logged_in']:
+	            return jsonify({'status': True})
+	    else:
+	        return jsonify({'status': False})
+	except:
+		return jsonify({'status': False})

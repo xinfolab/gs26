@@ -1,13 +1,11 @@
 {% include 'header.html' %}
 
             <!-- End Navbar -->
-            <div class="panel-header panel-header-sm">
-            </div>
-            <div class="content" ng-controller="menuController">
+            <div class="panel-header panel-header-sm"></div>
+            <div class="content">
                 <div class="row">
                     <div class="col-md-8">
                         <div class="card">
-                            <div ng-show="regSuccess" class="alert alert-danger">{{regSuccessMessage}}</div>
                             <div ng-view></div>
                         </div>
                     </div>

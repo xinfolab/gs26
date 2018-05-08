@@ -24,11 +24,6 @@ angular.module('myApp').controller('menuController',
       'class': 'ui-1_bell-53',
     },
     {
-      'name': 'registration',
-      'url': 'user#!/register',
-      'class': 'users_single-02',
-    },
-    {
       'name': 'table list',
       'url': 'tables',
       'class': 'design_bullet-list-67',
@@ -37,6 +32,16 @@ angular.module('myApp').controller('menuController',
       'name': 'typography',
       'url': 'typography',
       'class': 'text_caps-small',
+    },
+    {
+      'name': 'registration',
+      'url': 'signup#!/register',
+      'class': 'users_single-02',
+    },
+    {
+      'name': 'sign in',
+      'url': 'signin#!/login',
+      'class': 'users_single-02',
     }
     ];
     for(i=0; i<$scope.menus.length; i++){
@@ -64,9 +69,9 @@ angular.module('myApp').controller('loginController',
       AuthService.login($scope.loginForm.email, $scope.loginForm.password)
         // handle success
         .then(function () {
-          $location.path('/');
           $scope.disabled = false;
           $scope.loginForm = {};
+          location.reload();
         })
         // handle error
         .catch(function () {
