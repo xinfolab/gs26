@@ -96,6 +96,7 @@ def register():
 		db.session.add(user)
 		db.session.commit()
 		status = 'success'
+		print('success')
 	except:
 		status = 'this user is already registerd'
 	db.session.close()
@@ -112,7 +113,7 @@ def login():
 		status = False
 	return jsonify({'result': status})
 
-@app.route('/api/logout')
+@app.route('/api/logout', methods=['GET'])
 def logout():
 	session.pop('logged_in', None)
 	return jsonify({'result': 'success'})

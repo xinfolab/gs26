@@ -3,7 +3,6 @@ angular.module('myApp').controller('menuController',
   function ($scope, $location){
     var currentPath = $location.absUrl();
 
-    $scope.test = "1234";
     $scope.menus = [{
       'name': 'dashboard',
       'url': 'dashboard',
@@ -102,6 +101,7 @@ angular.module('myApp').controller('registerController',
           $location.path('/login');
           $scope.disabled = false;
           $scope.registerForm = {};
+          demo.regSuccess('top','center');
         })
         // handle error
         .catch(function () {

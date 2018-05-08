@@ -1,4 +1,5 @@
-myApp = angular.module('myApp', ['ngRoute']).factory('AuthService',
+myApp = angular.module('myApp', ['ngRoute']);
+myApp.factory('AuthService',
   ['$q', '$timeout', '$http',
   function ($q, $timeout, $http) {
 
@@ -13,8 +14,8 @@ function login(email, password) {
   // send a post request to the server
   $http.post('/api/login', {email: email, password: password})
     // handle success
-    .then(function (data, status) {
-      if(status === 200 && data.result){
+    .then(function (response) {
+      if(response.status === 200 && response.data['result']==true){
         user = true;
         deferred.resolve();
       } else {
@@ -41,15 +42,15 @@ function register(email, username, password, password_confirm) {
   // send a post request to the server
   $http.post('/api/register', {email: email, username: username, password: password, password_confirm: password_confirm})
     // handle success
-    .then(function (data, status) {
-      if(status === 200 && data.result){
+    .then(function (response) {
+      if(response.status === 200 && response.data['result']=='success'){
         deferred.resolve();
       } else {
         deferred.reject();
       }
     })
     // handle error
-    .catch(function (data) {
+    .catch(function (response) {
       deferred.reject();
     });
 
@@ -60,6 +61,7 @@ function register(email, username, password, password_confirm) {
 
 function isLoggedIn() {
   if(user) {
+    $location.path('/login');
     return true;
   } else {
     return false;

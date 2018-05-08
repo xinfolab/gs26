@@ -460,6 +460,23 @@ demo = {
                 align: align
             }
         });
-	}
+	},
+
+  regSuccess: function(from, align){
+      color = 'success';
+
+      $.notify({
+          icon: "now-ui-icons ui-1_bell-53",
+          message: "Registration Success!"
+
+        },{
+            type: color,
+            timer: 100,
+            placement: {
+                from: from,
+                align: align
+            }
+        });
+  }
 
 };
