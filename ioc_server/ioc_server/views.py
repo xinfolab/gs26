@@ -3,46 +3,95 @@ from flask import Response
 from flask import render_template
 from flask import jsonify
 from flask import session
+from flask import redirect
 from ioc_server import app
 from ioc_server import db
 from ioc_server import bcrypt
 from ioc_server.models import User
 import os
 import re
+import json
 from werkzeug.datastructures import Headers
 
 @app.route('/')
-@app.route('/dashboard', methods=['GET'])
-def dashboard():
-	return render_template('dashboard.html')
+def main():
+	return render_template('main.html')
+	
+@app.route('/signin', methods=['GET'])
+def signin():
+	try:
+		if session['logged_in'] == True:
+			return redirect('/report', code=302)
+		return render_template('signin.html')
+	except:
+		return render_template('signin.html')
+
+@app.route('/report', methods=['GET'])
+def report():
+	try:
+		if session['logged_in'] == False:
+			return redirect('/signin', code=302)
+		return render_template('report.html')
+	except:
+		return render_template('signin.html')
 
 @app.route('/icons', methods=['GET'])
 def icons():
-	return render_template('icons.html')
+	try:
+		if session['logged_in'] == False:
+			return redirect('/signin', code=302)
+		return render_template('icons.html')
+	except:
+		return render_template('signin.html')
 
 @app.route('/map', methods=['GET'])
 def map():
-	return render_template('map.html')
+	try:
+		if session['logged_in'] == False:
+			return redirect('/signin', code=302)
+		return render_template('map.html')
+	except:
+		return render_template('signin.html')
 
 @app.route('/tables', methods=['GET'])
 def tables():
-	return render_template('tables.html')
+	try:
+		if session['logged_in'] == False:
+			return redirect('/signin', code=302)
+		return render_template('tables.html')
+	except:
+		return render_template('signin.html')
 
 @app.route('/upgrade', methods=['GET'])
 def upgrade():
 	return render_template('upgrade.html')
 
-@app.route('/notifications', methods=['GET'])
-def notifications():
-	return render_template('notifications.html')
+@app.route('/notice', methods=['GET'])
+def notice():
+	try:
+		if session['logged_in'] == False:
+			return redirect('/signin', code=302)
+		return render_template('notice.html')
+	except:
+		return render_template('signin.html')
 
 @app.route('/typography', methods=['GET'])
 def typography():
-	return render_template('typography.html')
+	try:
+		if session['logged_in'] == False:
+			return redirect('/signin', code=302)
+		return render_template('typography.html')
+	except:
+		return render_template('signin.html')
 
-@app.route('/user', methods=['GET'])
-def user():
-	return render_template('user.html', methods=['GET'])
+@app.route('/signup', methods=['GET'])
+def signup():
+	try:
+		if session['logged_in'] == True:
+			return redirect('/report', code=302)
+		return render_template('signup.html')
+	except:
+		return render_template('signup.html')
 
 @app.route('/reports/<report>', methods=['POST'])
 def get_report(report):
@@ -96,7 +145,9 @@ def register():
 		db.session.add(user)
 		db.session.commit()
 		status = 'success'
-	except:
+		os.mkdir(os.path.join('./ioc_server/reports', user.get_token()))
+	except Exception as e:
+		print(e)
 		status = 'this user is already registerd'
 	db.session.close()
 	return jsonify({'result': status})
@@ -112,7 +163,30 @@ def login():
 		status = False
 	return jsonify({'result': status})
 
-@app.route('/api/logout')
+@app.route('/api/logout', methods=['GET'])
 def logout():
 	session.pop('logged_in', None)
 	return jsonify({'result': 'success'})
+
+@app.route('/api/status', methods=['GET'])
+def status():
+	try:
+	    if session.get('logged_in'):
+	        if session['logged_in']:
+	            return jsonify({'status': True})
+	    else:
+	        return jsonify({'status': False})
+	except:
+		return jsonify({'status': False})
+
+@app.route('/api/getreport', methods=['POST'])
+def getreport():
+	json_data = request.json
+	user = User.query.filter_by(username=json_data['username']).first()
+	report_dir = './ioc_server/reports/'+user.token+'/'
+	report_list = os.listdir(report_dir)
+	result = {}
+	for i in range(len(report_list)):
+		result.update({str(i+1): report_list[i],})
+
+	return jsonify(result)

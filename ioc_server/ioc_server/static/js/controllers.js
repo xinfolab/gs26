@@ -3,10 +3,9 @@ angular.module('myApp').controller('menuController',
   function ($scope, $location){
     var currentPath = $location.absUrl();
 
-    $scope.test = "1234";
     $scope.menus = [{
-      'name': 'dashboard',
-      'url': 'dashboard',
+      'name': 'report',
+      'url': 'report',
       'class': 'design_app',
     },
     {
@@ -20,14 +19,9 @@ angular.module('myApp').controller('menuController',
       'class': 'location_map-big',
     },
     {
-      'name': 'notifications',
-      'url': 'notifications',
+      'name': 'notice',
+      'url': 'notice',
       'class': 'ui-1_bell-53',
-    },
-    {
-      'name': 'registration',
-      'url': 'user#!/register',
-      'class': 'users_single-02',
     },
     {
       'name': 'table list',
@@ -38,6 +32,16 @@ angular.module('myApp').controller('menuController',
       'name': 'typography',
       'url': 'typography',
       'class': 'text_caps-small',
+    },
+    {
+      'name': 'registration',
+      'url': 'signup#!/register',
+      'class': 'users_single-02',
+    },
+    {
+      'name': 'sign in',
+      'url': 'signin#!/login',
+      'class': 'users_single-02',
     }
     ];
     for(i=0; i<$scope.menus.length; i++){
@@ -65,9 +69,9 @@ angular.module('myApp').controller('loginController',
       AuthService.login($scope.loginForm.email, $scope.loginForm.password)
         // handle success
         .then(function () {
-          $location.path('/');
           $scope.disabled = false;
           $scope.loginForm = {};
+          location.reload();
         })
         // handle error
         .catch(function () {
@@ -102,6 +106,7 @@ angular.module('myApp').controller('registerController',
           $location.path('/login');
           $scope.disabled = false;
           $scope.registerForm = {};
+          demo.regSuccess('top','center');
         })
         // handle error
         .catch(function () {
@@ -124,6 +129,7 @@ angular.module('myApp').controller('logoutController',
       AuthService.logout()
         .then(function () {
           $location.path('/login');
+          window.setTimeout("location.reload();", 2000);
         });
     };
 

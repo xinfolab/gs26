@@ -460,6 +460,56 @@ demo = {
                 align: align
             }
         });
-	}
+	},
 
+  regSuccess: function(from, align){
+      color = 'success';
+
+      $.notify({
+          icon: "now-ui-icons ui-1_bell-53",
+          message: "Registration Success!"
+
+        },{
+            type: color,
+            timer: 100,
+            placement: {
+                from: from,
+                align: align
+            }
+        });
+  },
+
+  regFailed: function(from, align, msg){
+      color = 'primary';
+
+      $.notify({
+          icon: "now-ui-icons ui-1_bell-53",
+          message: msg
+
+        },{
+            type: color,
+            timer: 100,
+            placement: {
+                from: from,
+                align: align
+            }
+        });
+  },
+
+  logoutSuccess: function(from, align, msg){
+      color = 'success';
+
+      $.notify({
+          icon: "now-ui-icons ui-1_bell-53",
+          message: msg + ", GoodBye!"
+
+        },{
+            type: color,
+            timer: 100,
+            placement: {
+                from: from,
+                align: align
+            }
+        });
+  }
 };

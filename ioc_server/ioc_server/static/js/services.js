@@ -1,4 +1,5 @@
-myApp = angular.module('myApp', ['ngRoute']).factory('AuthService',
+myApp = angular.module('myApp', ['ngRoute']);
+myApp.factory('AuthService',
   ['$q', '$timeout', '$http',
   function ($q, $timeout, $http) {
 
@@ -13,8 +14,8 @@ function login(email, password) {
   // send a post request to the server
   $http.post('/api/login', {email: email, password: password})
     // handle success
-    .then(function (data, status) {
-      if(status === 200 && data.result){
+    .then(function (response) {
+      if(response.status === 200 && response.data['result']==true){
         user = true;
         deferred.resolve();
       } else {
@@ -41,15 +42,16 @@ function register(email, username, password, password_confirm) {
   // send a post request to the server
   $http.post('/api/register', {email: email, username: username, password: password, password_confirm: password_confirm})
     // handle success
-    .then(function (data, status) {
-      if(status === 200 && data.result){
+    .then(function (response) {
+      if(response.status === 200 && response.data['result']=='success'){
         deferred.resolve();
       } else {
+        demo.regFailed('top', 'center', response.data['result']);
         deferred.reject();
       }
     })
     // handle error
-    .catch(function (data) {
+    .catch(function (response) {
       deferred.reject();
     });
 
@@ -74,12 +76,14 @@ function logout() {
   // send a get request to the server
   $http.get('/api/logout')
     // handle success
-    .then(function (data) {
+    .then(function (response) {
+      demo.logoutSuccess('top','center', "TestUser");
       user = false;
       deferred.resolve();
     },
     // handle error
-    function (data) {
+    function (response) {
+      demo.logoutSuccess('top','center', "TestUser");
       user = false;
       deferred.reject();
     });
@@ -88,12 +92,30 @@ function logout() {
   return deferred.promise;
 
 }
+
+function getUserStatus() {
+  return $http.get('/api/status')
+  // handle success
+  .then(function (response) {
+    if(response.data['status']){
+      user = true;
+    } else {
+      user = false;
+    }
+  },
+  // handle error
+  function (response) {
+    user = false;
+  });
+}
+
     // return available functions for use in controllers
     return ({
       isLoggedIn: isLoggedIn,
       login: login,
       logout: logout,
-      register: register
+      register: register,
+      getUserStatus: getUserStatus
     });
 
 }]);
