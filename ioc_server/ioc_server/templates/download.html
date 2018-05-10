@@ -12,11 +12,11 @@
                             </div>
 
                             <div class="card-body">
-                                <form class="form">
+                                <form class="form" action="/api/download">
                                     <div class="row">
                                         <div class="col-md-4 pr-1">
                                             <img src="{{ url_for('static', filename='img/background.png') }}"  style="max-width: 100%; height: auto;"/>
-                                            <item class="btn btn-default" style="display: table; margin-left: auto; margin-right: auto;"><b>Download Client</b></item>
+                                            <button type="submit" class="btn btn-default" style="display: table; margin-left: auto; margin-right: auto;"><b>Download Client</b></button>
                                         </div>
                                     </div>
                                 </form>
