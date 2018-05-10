@@ -4,6 +4,7 @@ from flask import render_template
 from flask import jsonify
 from flask import session
 from flask import redirect
+from flask import abort
 from ioc_server import app
 from ioc_server import db
 from ioc_server import bcrypt
@@ -13,10 +14,22 @@ import re
 import json
 from werkzeug.datastructures import Headers
 
+IOC_DOWNLOAD_DIRECTORY = '/home/gs26/gs26/ioc_server/ioc_server/update'
+
+
 @app.route('/')
 def main():
 	return render_template('main.html')
-	
+
+@app.route('/download', methods=['GET'])
+def download():
+	try:
+		if session['logged_in'] == False:
+			return redirect('/signin', code=302)
+		return render_template('download.html')
+	except:
+		return redirect('/signin', code=302)
+
 @app.route('/signin', methods=['GET'])
 def signin():
 	try:
@@ -107,11 +120,16 @@ def get_report(report):
 
 	return jsonify({"result" : result})
 
+@app.route('/update/all_file_list', methods=['GET'])
+def update_file_list():
+	filenames = os.listdir(IOC_DOWNLOAD_DIRECTORY)
+
+	return str(filenames)
 
 @app.route('/update/<filename>', methods=['GET'])
 def download_file(filename):
 	files = filename.encode('utf-8')
-	full_path = os.path.join('update',filename)
+	full_path = os.path.join(IOC_DOWNLOAD_DIRECTORY,filename)
 	headers = Headers()
 	headers.add('Content-Disposition', 'attachment', filename=files)
 	headers['Content-Length']= os.path.getsize(full_path)
@@ -190,3 +208,11 @@ def getreport():
 		result.update({str(i+1): report_list[i],})
 
 	return jsonify(result)
+
+@app.route('/api/download', methods=['GET'])
+def downloadclient():
+	try:
+		print(app.config(app.config.BaseConfig.CLIENT_FOLDER))
+		return send_from_directory(app.config['CLIENT_FOLDER'],'testfile.exe', as_attachment=True)
+	except Exception as e:
+		abort(400)
