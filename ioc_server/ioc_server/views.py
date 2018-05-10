@@ -177,6 +177,7 @@ def login():
 	user = User.query.filter_by(email=json_data['email']).first()
 	if user and bcrypt.check_password_hash(user.password, json_data['password']):
 		session['logged_in'] = True
+		session['user'] = user.username
 		status = True
 	else:
 		status = False
@@ -185,6 +186,7 @@ def login():
 @app.route('/api/logout', methods=['GET'])
 def logout():
 	session.pop('logged_in', None)
+	session.pop('user', None)
 	return jsonify({'result': 'success'})
 
 @app.route('/api/status', methods=['GET'])
@@ -213,3 +215,14 @@ def getreport():
 @app.route('/api/download', methods=['GET'])
 def downloadclient():
 	return send_from_directory(app.config['CLIENT_FOLDER'],'testfile.exe')
+
+@app.route('/api/username', methods=['GET'])
+def username():
+	try:
+		if session.get('logged_in'):
+			if session['logged_in']:
+				return jsonify({'username': session['user']})
+		else:
+			return jsonify({'username': False})
+	except:
+		return jsonify({'username': False})

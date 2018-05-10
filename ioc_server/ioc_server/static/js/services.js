@@ -68,25 +68,37 @@ function isLoggedIn() {
   }
 }
 
-function logout() {
+function getUserName() {
+  return $http.get('/api/username');
+}
+
+function logout(username) {
 
   // create a new instance of deferred
   var deferred = $q.defer();
 
   // send a get request to the server
-  $http.get('/api/logout')
-    // handle success
+  $http.get('/api/username')
     .then(function (response) {
-      demo.logoutSuccess('top','center', "TestUser");
-      user = false;
-      deferred.resolve();
-    },
-    // handle error
-    function (response) {
-      demo.logoutSuccess('top','center', "TestUser");
-      user = false;
-      deferred.reject();
-    });
+      if(response.data['username']){
+        $http.get('/api/logout')
+          // handle success
+          .then(function (_response) {
+            demo.logoutSuccess('top','center', response.data['username']);
+            user = false;
+            deferred.resolve();
+          },
+          // handle error
+          function (_response) {
+            demo.logoutSuccess('top','center', response.data['username']);
+            user = false;
+            deferred.reject();
+          });  
+      }
+    })
+    .catch(function (response) {
+    })
+
 
   // return promise object
   return deferred.promise;
