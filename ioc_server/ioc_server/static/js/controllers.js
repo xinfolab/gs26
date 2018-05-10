@@ -2,8 +2,7 @@ angular.module('myApp').controller('menuController',
   ['$scope', '$location', 'AuthService',
   function ($scope, $location, AuthService){
     var currentPath = $location.absUrl();
-
-    if(AuthService.isLoggedIn()){
+    if(!AuthService.isLoggedIn()){
       $scope.menus = [{
         'name': 'report',
         'url': 'report',
