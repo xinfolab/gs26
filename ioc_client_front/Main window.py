@@ -1,13 +1,17 @@
 import sys
 
 from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import QWidget, QLabel, QApplication, QPushButton, QTextEdit
+from PyQt5.QtWidgets import QWidget, QLabel, QApplication, QPushButton, QTextEdit, QMessageBox
 from PyQt5.QtGui import QIcon, QPixmap
+from urllib.request import urlopen
 from StartKx import Ui_Info
 
+import login
 
 class Ui_MainWindow(QWidget):
-  
+    id = None
+    password = None
+
     def __init__(self):
         super().__init__()
         self.mainUI()
@@ -44,10 +48,10 @@ class Ui_MainWindow(QWidget):
         ID_Label.setFixedSize(50,50)
         ID_Label.move(50,430)
 
-        ID_txt = QTextEdit('',self)
-        ID_txt.setFixedSize(150,30)
-        ID_txt.move(120,440)
-        ID_txt.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
+        self.ID_txt = QTextEdit('',self)
+        self.ID_txt.setFixedSize(150,30)
+        self.ID_txt.move(120,440)
+        self.ID_txt.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
 
         ### PW Label, txt
         PW_Label = QLabel('',self)
@@ -57,10 +61,10 @@ class Ui_MainWindow(QWidget):
         PW_Label.setFixedSize(50,50)
         PW_Label.move(50,490)
 
-        PW_txt = QTextEdit('',self)
-        PW_txt.setFixedSize(150,30)
-        PW_txt.move(120,500)
-        PW_txt.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
+        self.PW_txt = QTextEdit('',self)
+        self.PW_txt.setFixedSize(150,30)
+        self.PW_txt.move(120,500)
+        self.PW_txt.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
         
         ### Sign In Button
         sin_btn = QPushButton('',self)
@@ -82,10 +86,26 @@ class Ui_MainWindow(QWidget):
 
         self.show()
 
+    def err_messagebox(self):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Critical)
+        msg.setText("Enter the ID or Password ")
+        msg.setWindowTitle("Login Error")
+
+        res = msg.exec_()
+
     def sin_btn_clicked(self):
-        self.hide()
-        self.UI = Ui_Info()
-        self.UI.show()
+        self.id = self.ID_txt.toPlainText()
+        self.password = self.PW_txt.toPlainText()
+
+        test = login.login()
+        if True != test.login(self.id, self.password):
+            self.err_messagebox()
+
+        else:
+            self.hide()
+            self.UI = Ui_Info(self.id, (urlopen('http://ip.42.pl/raw').read()).decode())
+            self.UI.show()
 
 ###    def sup_btn_clicked(self):
 ###        UI = Ui_Processing()

@@ -1,6 +1,6 @@
 import wmi
 
-GET_REGISTRY_TEST = 1
+GET_REGISTRY_TEST = 0
 
 ####
 # AppEvents\EventLabels 는 데이터가 일치하는지 확인하기 위한 값
@@ -18,79 +18,47 @@ if GET_REGISTRY_TEST == 1:
 BASIC_KEY = [
   0x80000001,
   0x80000002
-  ]
+]
+class registry:
+    match_list = []
+    ioc_registry_list = []
 
-####
-# 순회하면서 모든 레지스트리 탐색
-# 현재는 사용하지 않음
-####
-# SUBKEY = {
-#   0x80000001 : [
-#     "AppEvents",
-#     "Console",
-#     "Control Panel",
-#     "Environment",
-#     "EUDC",
-#     "Keyboard Layout",
-#     "Network",
-#     "Printers",
-#     "Software",
-#     "System",
-#     "Volatile Environment"
-#   ],
-#   0x80000002 : [
-#     "AppEvents",
-#     "Console",
-#     "Control Panel",
-#     "Environment",
-#     "EUDC",
-#     "Keyboard Layout",
-#     "Network",
-#     "Printers",
-#     "Software",
-#     "System",
-#     "Volatile Environment"
-#   ]
-# }
-#
-# def recursive_search(basic_key, wmic, rootkey):
-#   result, names = wmic.EnumKey(hDefKey=basic_key, sSubKeyName=rootkey)
-#   for key in names:
-#     subkey_buf = rootkey + "\\" + key
-#     recursive_search(basic_key, wmic, subkey_buf)
-#     print(subkey_buf)
-#
-# def get_registry_key():
-#   wmic = wmi.WMI(namespace="default").StdRegProv
-#
-#   for basic_key_num in range(len(BASIC_KEY)):
-#     subkey_list = SUBKEY[BASIC_KEY[basic_key_num]]
-#     for subkey_num in range(len(subkey_list)):
-#       result, names = wmic.EnumKey(hDefKey=BASIC_KEY[basic_key_num], sSubKeyName = subkey_list[subkey_num])
-#       for key in names:
-#         subkey_buf = subkey_list[subkey_num]+"\\"+key
-#         recursive_search(BASIC_KEY[basic_key_num], wmic, subkey_buf)
-#
-#         #print(key)
-####
+    def find_ioc_of_registry(self):
+        wmic = wmi.WMI(namespace="default").StdRegProv
 
-####
-## 값 가져오기
-#result, value = wmic.GetStringValue(hDefKey=HKLM, sSubKeyName="SYSTEM\ControlSet001\Services\MRxDAV",sValueName="ImagePath")
-#print(value)
-####
+        if GET_REGISTRY_TEST == 1:
+            for basic_key_num in range(len(BASIC_KEY)):
+                for data_num in range(len(get_registry_test_data)):
+                    result, names = wmic.EnumKey(hDefKey=BASIC_KEY[basic_key_num], sSubKeyName=get_registry_test_data[data_num])
+                    print("target : ",get_registry_test_data[data_num])
+                    print("result : ",result)
+                    print(len(names))
+                    print("==================")
+            return "registry ioc find test"
 
-def find_ioc_of_registry():
-  wmic = wmi.WMI(namespace="default").StdRegProv
+    # 테스트 코드가 아닐 때 실행
+        with open("..\\ioc\\ioc_registry_list.txt") as f:
+            while True:
+                line = f.readline()
+                if not line:
+                    break
+                self.ioc_registry_list.append(line)
 
-# names 개수가 0 또는 result 가 0 이상이면 ioc와 일치
-  for basic_key_num in range(len(BASIC_KEY)):
-    if GET_REGISTRY_TEST == 1:
-      for data_num in range(len(get_registry_test_data)):
-        result, names = wmic.EnumKey(hDefKey=BASIC_KEY[basic_key_num], sSubKeyName=get_registry_test_data[data_num])
-        print("test : ",result)
-        print(len(names))
-    else:
-      print("Not Yet")
+        for basic_key_num in range(len(BASIC_KEY)):
+            for data_num in range(len(self.ioc_registry_list)):
+                result, match_number = wmic.EnumKey(hDefKey=BASIC_KEY[basic_key_num], sSubKeyName=self.ioc_registry_list[data_num])
 
-find_ioc_of_registry()
+            # names 개수가 0 또는 result 가 0 이상이면 ioc와 일치
+            if len(match_number) > 0:
+                root_key = ""
+                if 0x80000001 == BASIC_KEY[basic_key_num]:
+                    root_key = "HKEY_CURRENT_USER"
+                else :
+                    root_key = "HKEY_LOCAL_MACHINE"
+                self.match_list.append(root_key + "\\" + self.ioc_registry_list[data_num])
+
+        return self.match_list
+
+if 1 == GET_REGISTRY_TEST:
+  test_class = registry()
+  test_class.find_ioc_of_registry()
