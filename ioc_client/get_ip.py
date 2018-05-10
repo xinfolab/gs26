@@ -15,7 +15,6 @@ proto_map = {
     (AF_INET6, SOCK_DGRAM): 'udp6',
 }
 
-
 #######
 # 127.0.0.1 은 정상적으로 탐지하는지 확인하기 위한 값
 if GET_IP_TEST is 1:
@@ -32,38 +31,50 @@ if GET_IP_TEST is 1:
 #######
 # TODO : 현재는 ioc 리스트를 각자 점검하기 때문에 나중에 완성하자
 #######
-def compare_ip(ioc_ip_list):
-    if GET_IP_TEST is 1:
-        for i in range(len(get_ip_test_data)):
-            if get_ip_test_data[i] in ioc_ip_list:
-                print(get_ip_test_data[i])
-            else:
-                print(AD)
+class ip:
+    match_ip_list = []
+    def compare_ip(self, user_ip_list):
+        ioc_c2_file = []
+        # compare_ip 함수 점검용 코드
+        if GET_IP_TEST is 1:
+            for i in range(len(get_ip_test_data)):
+                if get_ip_test_data[i] in user_ip_list:
+                    print(get_ip_test_data[i])
+                else:
+                    print(AD)
+            return "test function\n"
 
-def get_ip():
-    #print_format = "%-30s %-13s"
-    #print(print_format % ("Remote address", "Status"))
+        # compare_ip 정상 작동
+        with open("..\\ioc\\ioc_c2_list.txt") as f:
+            while True:
+                line = f.readline()
+                if not line:
+                    break
+                ioc_c2_file.append(line)
 
-    ioc_ip_tuple = ()
-    for c in psutil.net_connections(kind='inet'):
-        remote_address = ""
-        if c.raddr:
-            remote_address = "%s:%s" % (c.raddr)
-        # remote address empty
-        if c.raddr == ():
-            continue
+        for i in range(len(ioc_c2_file)):
+            if ioc_c2_file[i] in user_ip_list:
+                self.match_ip_list.append(ioc_c2_file[i])
 
-        ioc_ip_tuple += c.raddr[:1]
+    def get_ip(self):
+        user_ip_tuple = ()
+        for c in psutil.net_connections(kind='inet'):
+            remote_address = ""
+            if c.raddr:
+                remote_address = "%s:%s" % (c.raddr)
+            # remote address empty
+            if c.raddr == ():
+                continue
 
-     #   print(print_format % (remote_address or AD, c.status))
+            user_ip_tuple += c.raddr[:1]
+        user_ip_list = list(set(list(user_ip_tuple)))
 
-    ioc_ip_list = list(set(list(ioc_ip_tuple)))
+        # ioc와 사용자 ip를 비교
+        self.compare_ip(user_ip_list)
 
-    # print(ioc_ip_list)
+        return self.match_ip_list
 
-    compare_ip(ioc_ip_list)
-
-
-
-
-get_ip()
+if GET_IP_TEST is 1:
+    class_test = ip()
+    test_list = class_test.get_ip()
+    print(test_list)
