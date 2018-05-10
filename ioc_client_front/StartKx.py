@@ -8,8 +8,12 @@ from Processing import Ui_Processing
 
 class Ui_Info(QDialog):
 
-    def __init__(self):
+    def __init__(self, id, ip):
+        self.user_id = id
+        self.user_ip = ip
+
         super().__init__()
+
         self.initUI()
 
     def initUI(self):
@@ -32,11 +36,11 @@ class Ui_Info(QDialog):
         close_btn.clicked.connect(QApplication.instance().quit)
 
         ### Label
-        user_id = QLabel('ID: k3y6reak', self)
+        user_id = QLabel('ID :' + self.user_id , self)
         user_id.setFont(QFont('Arial', 20))
         user_id.setStyleSheet('color:white')
         user_id.move(310, 130)
-        user_ip = QLabel('IP: 117.16.11.18', self)
+        user_ip = QLabel('IP: ' + self.user_ip, self)
         user_ip.setFont(QFont('Arial', 20))
         user_ip.setStyleSheet('color:white')
         user_ip.move(310, 170)
