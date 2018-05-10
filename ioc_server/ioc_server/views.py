@@ -5,6 +5,7 @@ from flask import jsonify
 from flask import session
 from flask import redirect
 from flask import abort
+from flask import send_from_directory
 from ioc_server import app
 from ioc_server import db
 from ioc_server import bcrypt
@@ -211,8 +212,4 @@ def getreport():
 
 @app.route('/api/download', methods=['GET'])
 def downloadclient():
-	try:
-		print(app.config(app.config.BaseConfig.CLIENT_FOLDER))
-		return send_from_directory(app.config['CLIENT_FOLDER'],'testfile.exe', as_attachment=True)
-	except Exception as e:
-		abort(400)
+	return send_from_directory(app.config['CLIENT_FOLDER'],'testfile.exe')

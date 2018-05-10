@@ -11,4 +11,4 @@ class BaseConfig(object):
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
 	UPDATE_FOLDER = 'update'
 	UPLOAD_FOLDER = 'upload'
-	CLIENT_FOLDER = '/home/gs26/gs26/ioc_server/ioc_server/'
+	CLIENT_FOLDER = '/home/gs26/gs26/ioc_server/ioc_server/static/client'
