@@ -22,7 +22,6 @@ class get_ip_thread(QThread):
         gip = core.get_ip.ip()
         self.ip_data = gip.get_ip()
         self.gipEvent.emit(self.ip_data)
-        self.sleep(10)
 
 
 class get_registry_thread(QThread):
@@ -49,7 +48,6 @@ class get_proc_thread(QThread):
 
     def run(self):
         pythoncom.CoInitialize()
-        self.sleep(20)
         gproc = core.get_proc_and_hash.proc()
         self.proc_data = gproc.get_proc()
         self.gprocEvent.emit(self.proc_data)
@@ -71,6 +69,8 @@ class get_file_thread(QThread):
 
 class Ui_Processing(QDialog):
     last_count = 0
+    count = 0
+    mutex = QMutex()
     def __init__(self):
 
         super().__init__()
@@ -162,10 +162,9 @@ class Ui_Processing(QDialog):
         self.gipThread.gipEvent.connect(self.gipThreadEventHandler)
         self.gipThreadStart()
 
-
-        #self.gregThread = get_registry_thread(self)
-        #self.gregThread.gregEvent.connect(self.gregThreadEventHandler)
-        #self.gregThreadStart()
+        self.gregThread = get_registry_thread(self)
+        self.gregThread.gregEvent.connect(self.gregThreadEventHandler)
+        self.gregThreadStart()
 
         self.gprocThread = get_proc_thread(self)
         self.gprocThread.gprocEvent.connect(self.gprocThreadEventHandler)
@@ -182,18 +181,18 @@ class Ui_Processing(QDialog):
 
     @pyqtSlot(list)
     def gipThreadEventHandler(self, ip_data):
-        count = len(ip_data)
-        self.tableWidget.setRowCount(count)
+        self.count += self.last_count
+        self.count += len(ip_data)
+        self.tableWidget.setRowCount(self.count)
         self.tableWidget.setColumnCount(3)
-        global last_count
-        i = 0
+
+        i = self.last_count
         for k in ip_data:
             self.tableWidget.setItem(i, 0, QTableWidgetItem("Warning"))
             self.tableWidget.setItem(i, 1, QTableWidgetItem(k))
             self.tableWidget.setItem(i, 2, QTableWidgetItem(""))
             i = i + 1
             self.last_count = i
-        
 
     @pyqtSlot()
     def gregThreadStart(self):
@@ -201,17 +200,17 @@ class Ui_Processing(QDialog):
 
     @pyqtSlot(list)
     def gregThreadEventHandler(self, reg_data):
-        count = len(reg_data)
-        self.tableWidget.setRowCount(count)
+        self.count += self.last_count
+        self.count += len(reg_data) -1
+
+        self.tableWidget.setRowCount(self.count)
         self.tableWidget.setColumnCount(3)
         i = self.last_count
         for reg_k in reg_data:
-            print(i)
             self.tableWidget.setItem(i, 0, QTableWidgetItem("Warning"))
             self.tableWidget.setItem(i, 1, QTableWidgetItem(reg_k))
             self.tableWidget.setItem(i, 2, QTableWidgetItem(""))
             i = i + 1
-            print(i)
             self.last_count = i
 
     @pyqtSlot()
@@ -220,8 +219,10 @@ class Ui_Processing(QDialog):
 
     @pyqtSlot(dict)
     def gprocThreadEventHandler(self, proc_data):
-        count = len(proc_data)
-        self.tableWidget.setRowCount(count)
+        self.count += self.last_count
+        self.count += len(proc_data) -1
+
+        self.tableWidget.setRowCount(self.count)
         self.tableWidget.setColumnCount(3)
         i = self.last_count
 
@@ -232,19 +233,22 @@ class Ui_Processing(QDialog):
             i = i + 1
             self.last_count = i
 
-
     @pyqtSlot()
     def gfileThreadStart(self):
         self.gfileThread.start()
 
     @pyqtSlot(dict)
     def gfileThreadEventHandler(self, file_data):
-        count = len(file_data)
-        self.tableWidget.setRowCount(count)
+        self.count += self.last_count
+        self.count += len(file_data) -2
+        
+        self.tableWidget.setRowCount(self.count)
         self.tableWidget.setColumnCount(3)
+
         i = self.last_count
 
         for k in file_data.keys():
+            print(i)
             if file_data[k] == "":
                 self.tableWidget.setItem(i, 0, QTableWidgetItem("Info"))
             else:
@@ -254,6 +258,8 @@ class Ui_Processing(QDialog):
             self.tableWidget.setItem(i, 2, QTableWidgetItem(file_data[k]))
             i = i + 1
             self.last_count = i
+
+
 
        ### clicked btn event show and hide
     def P_btn_clicked(self):
