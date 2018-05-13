@@ -21,7 +21,7 @@ def make_format(session_id, report):
 
 def send_report(report):
     save_time_data = time.localtime()
-    time_format = "%04d%02d%02d%02d%02d%02d" % (save_time_data.tm_yday, save_time_data.tm_mon, save_time_data.tm_mday, save_time_data.tm_hour, save_time_data.tm_min, save_time_data.tm_sec)
+    time_format = "%04d%02d%02d%02d%02d%02d" % (save_time_data.tm_year, save_time_data.tm_mon, save_time_data.tm_mday, save_time_data.tm_hour, save_time_data.tm_min, save_time_data.tm_sec)
     url = conn.server_data.server + conn.server_data.REPORT_PARAMETER + time_format
     headers = conn.server_data.json_type_headers
 

@@ -2,13 +2,13 @@ import json
 from collections import OrderedDict
 import requests
 
-import server_data
+import conn
 
 # 현재 서버로 아이디 비밀번호 전송할 경우 이렇게 됨
 # 117.16.11.8:8888/api/login
 # json포맷으로 {'email': 'test@test.com', 'password': 'test'}
 
-LOGIN_TEST = 1
+LOGIN_TEST = 0
 
 class login:
     id = None
@@ -25,8 +25,8 @@ class login:
     def send_info(self):
         data = self.set_sending_data()
 
-        url = server_data.server + server_data.LOGIN_PARAMETER
-        headers = server_data.json_type_headers
+        url = conn.server_data.server + conn.server_data.LOGIN_PARAMETER
+        headers = conn.server_data.json_type_headers
 
         res = requests.post(url,data=data, headers=headers)
         data = json.loads(res.text)
@@ -38,7 +38,7 @@ class login:
 
         return True
 
-    def login(self, id, passwd):
+    def login_start(self, id, passwd):
         if id == "" or passwd == "":
             # print("err")
             return False
