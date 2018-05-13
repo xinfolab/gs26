@@ -1,13 +1,13 @@
 import sys
 import core
-import time
+import conn
 import pythoncom
 from PyQt5.QtCore import *
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtWidgets import QLabel, QApplication, QPushButton, QDialog, QTableWidget, QTableWidgetItem
 from PyQt5.QtGui import QPixmap, QIcon
 from GotoTray import GoTrayUI
-
+from collections import OrderedDict
 
 class get_ip_thread(QThread):
     gipEvent = QtCore.pyqtSignal(list)
@@ -22,7 +22,6 @@ class get_ip_thread(QThread):
         gip = core.get_ip.ip()
         self.ip_data = gip.get_ip()
         self.gipEvent.emit(self.ip_data)
-
 
 class get_registry_thread(QThread):
     gregEvent = QtCore.pyqtSignal(list)
@@ -52,7 +51,6 @@ class get_proc_thread(QThread):
         self.proc_data = gproc.get_proc()
         self.gprocEvent.emit(self.proc_data)
 
-
 class get_file_thread(QThread):
     gfileEvent = QtCore.pyqtSignal(dict)
 
@@ -67,10 +65,28 @@ class get_file_thread(QThread):
         self.file_data = gfile.get_file()
         self.gfileEvent.emit(self.file_data)
 
+class send_report_thread(QThread):
+    countEvent = QtCore.pyqtSignal(int)
+
+    def __init__(self, parent=None):
+        super().__init__()
+        self.main = parent
+        self.count = 4
+        self._status = True
+
+    def run(self):
+        while self._status:
+            if self.count <= 0:
+                self._status = False
+                self.countEvent.emit(self.count)
+            else:
+                self.msleep(1000)
+
 class Ui_Processing(QDialog):
     last_count = 0
     count = 0
-    mutex = QMutex()
+    report = OrderedDict()
+
     def __init__(self):
 
         super().__init__()
@@ -158,6 +174,7 @@ class Ui_Processing(QDialog):
 
         self.show()
 
+        ### core thread
         self.gipThread = get_ip_thread(self)
         self.gipThread.gipEvent.connect(self.gipThreadEventHandler)
         self.gipThreadStart()
@@ -170,10 +187,14 @@ class Ui_Processing(QDialog):
         self.gprocThread.gprocEvent.connect(self.gprocThreadEventHandler)
         self.gprocThreadStart()
 
-
         self.gfileThread = get_file_thread(self)
         self.gfileThread.gfileEvent.connect(self.gfileThreadEventHandler)
         self.gfileThreadStart()
+
+        ### report thread
+        self.reportThread = send_report_thread(self)
+        self.reportThread.countEvent.connect(self.reportThreadEventHandler)
+        self.reportThreadStart()
 
     @pyqtSlot()
     def gipThreadStart(self):
@@ -187,12 +208,16 @@ class Ui_Processing(QDialog):
         self.tableWidget.setColumnCount(3)
 
         i = self.last_count
+        self.report["ip"] = ip_data
+
         for k in ip_data:
             self.tableWidget.setItem(i, 0, QTableWidgetItem("Warning"))
             self.tableWidget.setItem(i, 1, QTableWidgetItem(k))
             self.tableWidget.setItem(i, 2, QTableWidgetItem(""))
             i = i + 1
             self.last_count = i
+
+        self.reportThread.count -= 1
 
     @pyqtSlot()
     def gregThreadStart(self):
@@ -205,13 +230,18 @@ class Ui_Processing(QDialog):
 
         self.tableWidget.setRowCount(self.count)
         self.tableWidget.setColumnCount(3)
+
         i = self.last_count
+        self.report["registry"] = reg_data
+
         for reg_k in reg_data:
             self.tableWidget.setItem(i, 0, QTableWidgetItem("Warning"))
             self.tableWidget.setItem(i, 1, QTableWidgetItem(reg_k))
             self.tableWidget.setItem(i, 2, QTableWidgetItem(""))
             i = i + 1
             self.last_count = i
+
+        self.reportThread.count -= 1
 
     @pyqtSlot()
     def gprocThreadStart(self):
@@ -224,7 +254,9 @@ class Ui_Processing(QDialog):
 
         self.tableWidget.setRowCount(self.count)
         self.tableWidget.setColumnCount(3)
+
         i = self.last_count
+        self.report["process"] = proc_data
 
         for proc_k in proc_data.keys():
             self.tableWidget.setItem(i, 0, QTableWidgetItem("Warning"))
@@ -232,6 +264,8 @@ class Ui_Processing(QDialog):
             self.tableWidget.setItem(i, 2, QTableWidgetItem(proc_data[proc_k]))
             i = i + 1
             self.last_count = i
+
+        self.reportThread.count -= 1
 
     @pyqtSlot()
     def gfileThreadStart(self):
@@ -246,9 +280,9 @@ class Ui_Processing(QDialog):
         self.tableWidget.setColumnCount(3)
 
         i = self.last_count
+        self.report["file"] = file_data
 
         for k in file_data.keys():
-            print(i)
             if file_data[k] == "":
                 self.tableWidget.setItem(i, 0, QTableWidgetItem("Info"))
             else:
@@ -258,8 +292,17 @@ class Ui_Processing(QDialog):
             self.tableWidget.setItem(i, 2, QTableWidgetItem(file_data[k]))
             i = i + 1
             self.last_count = i
+        self.reportThread.count -= 1
 
+    @pyqtSlot()
+    def reportThreadStart(self):
+        self.reportThread.start()
 
+    @pyqtSlot(int)
+    def reportThreadEventHandler(self, count):
+        if count <= 0:
+            complete_report = conn.make_format("test@test.com", self.report)
+            conn.send_report(complete_report)
 
        ### clicked btn event show and hide
     def P_btn_clicked(self):
@@ -300,4 +343,6 @@ class Ui_Processing(QDialog):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     UI = Ui_Processing()
+
+
     sys.exit(app.exec_())
