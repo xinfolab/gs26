@@ -1,13 +1,17 @@
 import sys
+from urllib.request import urlopen
+import conn
 
 from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import QWidget, QLabel, QApplication, QPushButton, QTextEdit
+from PyQt5.QtWidgets import QWidget, QLabel, QApplication, QPushButton, QTextEdit, QMessageBox
 from PyQt5.QtGui import QIcon, QPixmap
 from StartKx import Ui_Info
 
 
 class Ui_MainWindow(QWidget):
-  
+    id = None
+    password = None
+
     def __init__(self):
         super().__init__()
         self.mainUI()
@@ -39,15 +43,15 @@ class Ui_MainWindow(QWidget):
         ### ID Label, txt
         ID_Label = QLabel('',self)
         ID_Label.setText('I D : ')
-        ID_Label.setFont(font) 
+        ID_Label.setFont(font)
         ID_Label.setStyleSheet("color: white")
         ID_Label.setFixedSize(50,50)
         ID_Label.move(50,430)
 
-        ID_txt = QTextEdit('',self)
-        ID_txt.setFixedSize(150,30)
-        ID_txt.move(120,440)
-        ID_txt.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
+        self.ID_txt = QTextEdit('',self)
+        self.ID_txt.setFixedSize(150,30)
+        self.ID_txt.move(120,440)
+        self.ID_txt.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
 
         ### PW Label, txt
         PW_Label = QLabel('',self)
@@ -57,11 +61,11 @@ class Ui_MainWindow(QWidget):
         PW_Label.setFixedSize(50,50)
         PW_Label.move(50,490)
 
-        PW_txt = QTextEdit('',self)
-        PW_txt.setFixedSize(150,30)
-        PW_txt.move(120,500)
-        PW_txt.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
-        
+        self.PW_txt = QTextEdit('',self)
+        self.PW_txt.setFixedSize(150,30)
+        self.PW_txt.move(120,500)
+        self.PW_txt.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
+
         ### Sign In Button
         sin_btn = QPushButton('',self)
         sin_btn.setText('Sign in')
@@ -82,18 +86,29 @@ class Ui_MainWindow(QWidget):
 
         self.show()
 
-    def sin_btn_clicked(self):
-        self.hide()
-        self.UI = Ui_Info()
-        self.UI.show()
+    def err_messagebox(self):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Critical)
+        msg.setText("Enter the ID or Password ")
+        msg.setWindowTitle("Login Error")
 
-###    def sup_btn_clicked(self):
-###        UI = Ui_Processing()
-###        UI.exec()
-###        UI.show()
+        res = msg.exec_()
+
+    def sin_btn_clicked(self):
+        self.id = self.ID_txt.toPlainText()
+        self.password = self.PW_txt.toPlainText()
+
+        test = conn.login()
+        if True != test.login_start(self.id, self.password):
+            self.err_messagebox()
+
+        else:
+            self.hide()
+            self.UI = Ui_Info(self.id, (urlopen('http://ip.42.pl/raw').read()).decode())
+            self.UI.show()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    
+
     UI = Ui_MainWindow()
     sys.exit(app.exec_())
