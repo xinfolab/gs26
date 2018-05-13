@@ -3,7 +3,7 @@ from requests import get
 
 import conn
 
-IOC_DIRECTORY = "..\\ioc"
+IOC_DIRECTORY = "..\\core\\ioc_list"
 
 # test
 UPDATE_CLASS_TEST = 1
