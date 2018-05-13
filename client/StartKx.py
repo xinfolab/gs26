@@ -1,3 +1,4 @@
+import conn
 import sys
 import webbrowser
 
@@ -11,6 +12,9 @@ class Ui_Info(QDialog):
     def __init__(self,id ,ip):
         self.user_id = id
         self.user_ip = ip
+
+        update = conn.update()
+        update.start()
 
         super().__init__()
         self.initUI()
