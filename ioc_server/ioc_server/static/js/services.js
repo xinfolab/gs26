@@ -12,7 +12,7 @@ myApp.factory('AuthService',
       var deferred = $q.defer();
 
       // send a post request to the server
-      $http.post('/api/login', {email: email, password: password})
+      $http.post('/api/login', {email: email, password: password, client: false})
         // handle success
         .then(function (response) {
           if(response.status === 200 && response.data['result']==true){
@@ -61,19 +61,10 @@ myApp.factory('AuthService',
     }
 
     function isLoggedIn() {
-      var deferred = $q.defer();
-
-      $http.get('/api/status')
-        .then(function (response){
-          if(response.data['status'])
-            deferred.resolve();
-          else
-            deferred.reject();
-        })
-        .catch(function (response){
-          deferred.reject();
-        });
-      return deferred.promise;
+      if(user)
+        return true;
+      else
+        return false;
     }
 
     function logout(username) {

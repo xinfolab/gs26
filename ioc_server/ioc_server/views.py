@@ -17,19 +17,9 @@ from werkzeug.datastructures import Headers
 
 IOC_DOWNLOAD_DIRECTORY = '/home/gs26/gs26/ioc_server/ioc_server/update'
 
-
 @app.route('/')
 def main():
 	return render_template('main.html')
-
-@app.route('/download', methods=['GET'])
-def download():
-	try:
-		if session['logged_in'] == False:
-			return redirect('/signin', code=302)
-		return render_template('download.html')
-	except:
-		return redirect('/signin', code=302)
 
 @app.route('/signin', methods=['GET'])
 def signin():
@@ -40,10 +30,25 @@ def signin():
 	except:
 		return render_template('signin.html')
 
-@app.route('/report', methods=['GET'])
+@app.route('/download', methods=['GET'])
+def download():
+	try:
+		if session['logged_in'] == False:
+			return redirect('/signin', code=302)
+		return render_template('download.html')
+	except:
+		return render_template('signin.html')
+
+@app.route('/report', methods=['GET', 'POST'])
 def report():
 	try:
 		if session['logged_in'] == False:
+			json_data = request.json
+			user = User.query.filter_by(token=json_data['token']).first()
+			if user:
+				session['logged_in'] = True
+				session['user'] = user.username
+				return render_template('report.html')
 			return redirect('/signin', code=302)
 		return render_template('report.html')
 	except:
@@ -176,9 +181,13 @@ def login():
 	json_data = request.json
 	user = User.query.filter_by(email=json_data['email']).first()
 	if user and bcrypt.check_password_hash(user.password, json_data['password']):
+		session.permanent = True
 		session['logged_in'] = True
 		session['user'] = user.username
-		status = True
+		if json_data['client']:
+			status = user.token
+		else:
+			status = True
 	else:
 		status = False
 	return jsonify({'result': status})

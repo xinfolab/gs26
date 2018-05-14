@@ -3,142 +3,52 @@ angular.module('myApp').controller('menuController',
   function ($scope, $location, AuthService){
     var currentPath = $location.absUrl();
 
-      $scope.menus = [{
-        'name': 'report',
-        'url': 'report',
-        'class': 'design_app',
-      },
-      {
-        'name': 'download',
-        'url': 'download',
-        'class': 'arrows-1_cloud-download-93',
-      },
-      {
-        'name': 'icons',
-        'url': 'icons',
-        'class': 'education_atom',
-      },
-      {
-        'name': 'map',
-        'url': 'map',
-        'class': 'location_map-big',
-      },
-      {
-        'name': 'notice',
-        'url': 'notice',
-        'class': 'ui-1_bell-53',
-      },
-      {
-        'name': 'table list',
-        'url': 'tables',
-        'class': 'design_bullet-list-67',
-      },
-      {
-        'name': 'typography',
-        'url': 'typography',
-        'class': 'text_caps-small',
-      },
-      {
-        'name': 'registration',
-        'url': 'signup#!/register',
-        'class': 'users_single-02',
-      },
-      {
-        'name': 'sign in',
-        'url': 'signin#!/login',
-        'class': 'users_single-02',
-      }
-      ];  
-
-// TODO : isLoggedIn run
-
-    AuthService.isLoggedIn()
-      .then(function (){
-        $scope.menus = [{
-          'name': 'report',
-          'url': 'report',
-          'class': 'design_app',
-        },
-        {
-          'name': 'download',
-          'url': 'download',
-          'class': 'arrows-1_cloud-download-93',
-        },
-        {
-          'name': 'icons',
-          'url': 'icons',
-          'class': 'education_atom',
-        },
-        {
-          'name': 'map',
-          'url': 'map',
-          'class': 'location_map-big',
-        },
-        {
-          'name': 'notice',
-          'url': 'notice',
-          'class': 'ui-1_bell-53',
-        },
-        {
-          'name': 'table list',
-          'url': 'tables',
-          'class': 'design_bullet-list-67',
-        },
-        {
-          'name': 'typography',
-          'url': 'typography',
-          'class': 'text_caps-small',
-        },
-        {
-          'name': 'registration',
-          'url': 'signup#!/register',
-          'class': 'users_single-02',
-        },
-        {
-          'name': 'sign in',
-          'url': 'signin#!/login',
-          'class': 'users_single-02',
-        }
-        ];  
-      })
-      .catch(function (){
-        $scope.menus = [{
-          'name': 'report',
-          'url': 'report',
-          'class': 'design_app',
-        },
-        {
-          'name': 'download',
-          'url': 'download',
-          'class': 'arrows-1_cloud-download-93',
-        },
-        {
-          'name': 'icons',
-          'url': 'icons',
-          'class': 'education_atom',
-        },
-        {
-          'name': 'map',
-          'url': 'map',
-          'class': 'location_map-big',
-        },
-        {
-          'name': 'notice',
-          'url': 'notice',
-          'class': 'ui-1_bell-53',
-        },
-        {
-          'name': 'table list',
-          'url': 'tables',
-          'class': 'design_bullet-list-67',
-        },
-        {
-          'name': 'typography',
-          'url': 'typography',
-          'class': 'text_caps-small',
-        }
-        ];
-      });
+     $scope.menus = [{
+       'name': 'report',
+       'url': 'report',
+       'class': 'design_app',
+     },
+     {
+       'name': 'download',
+       'url': 'download',
+       'class': 'arrows-1_cloud-download-93',
+     },
+     {
+       'name': 'icons',
+       'url': 'icons',
+       'class': 'education_atom',
+     },
+     {
+       'name': 'map',
+       'url': 'map',
+       'class': 'location_map-big',
+     },
+     {
+       'name': 'notice',
+       'url': 'notice',
+       'class': 'ui-1_bell-53',
+     },
+     {
+       'name': 'table list',
+       'url': 'tables',
+       'class': 'design_bullet-list-67',
+     },
+     {
+       'name': 'typography',
+       'url': 'typography',
+       'class': 'text_caps-small',
+     },
+     {
+       'name': 'registration',
+       'url': 'signup#!/register',
+       'class': 'users_single-02',
+     },
+     {
+       'name': 'sign in',
+       'url': 'signin#!/login',
+       'class': 'users_single-02',
+     }
+     ];  
 
     for(i=0; i<$scope.menus.length; i++){
       if(currentPath.includes($scope.menus[i].url))
