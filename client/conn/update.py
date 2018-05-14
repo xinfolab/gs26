@@ -6,7 +6,7 @@ import conn
 IOC_DIRECTORY = ".\\core\\ioc_list"
 
 # test
-UPDATE_CLASS_TEST = 1
+UPDATE_CLASS_TEST = 0
 
 class update:
     file_list = []
