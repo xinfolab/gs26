@@ -1,5 +1,4 @@
 import sys
-from Report import Ui_Report
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QDialog, QLabel, QApplication, QPushButton
@@ -16,14 +15,11 @@ class Ui_completed(QDialog):
         ### remove title bar
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint|QtCore.Qt.WindowStaysOnBottomHint)
 
-
-
         ### background image and Fixed Size
         back_label = QLabel(self)
         back = QPixmap('.\\img\\Scan_Completed.png')
         back_label.setPixmap(back)
         self.setFixedSize(back.width(),back.height())
-
         
         ### Open Report Button
         R_btn = QPushButton('',self)
@@ -41,8 +37,6 @@ class Ui_completed(QDialog):
         close_Btn.move(back.width()-40,20)
         close_Btn.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
         close_Btn.clicked.connect(QApplication.instance().quit)
-
-        
 
         self.show()
         ### Click Open_Report Btn -> Web
