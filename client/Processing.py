@@ -305,6 +305,8 @@ class Ui_Processing(QDialog):
             complete_report = conn.make_format("test@test.com", self.report)
             conn.send_report(complete_report)
 
+            data = conn.send_token()
+
        ### clicked btn event show and hide
     def P_btn_clicked(self):
         self.P_btn.setVisible(False)
