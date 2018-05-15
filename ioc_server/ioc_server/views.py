@@ -16,6 +16,7 @@ import json
 from werkzeug.datastructures import Headers
 
 IOC_DOWNLOAD_DIRECTORY = '/home/gs26/gs26/ioc_server/ioc_server/update'
+REPORT_SAVE_DIRECTORY = '/home/gs26/gs26/ioc_server/ioc_server/report'
 
 @app.route('/')
 def main():
@@ -42,17 +43,23 @@ def download():
 @app.route('/report', methods=['GET', 'POST'])
 def report():
 	try:
-		if session['logged_in'] == False:
-			json_data = request.json
-			user = User.query.filter_by(token=json_data['token']).first()
-			if user:
-				session['logged_in'] = True
-				session['user'] = user.username
-				return render_template('report.html')
-			return redirect('/signin', code=302)
-		return render_template('report.html')
-	except:
-		return render_template('signin.html')
+		json_data = request.json
+	except Exception as e:
+		json_data = None
+
+	if json_data is None:
+		try:
+			if session['logged_in'] == False:
+				return redirect('/signin', code=302)
+			return render_template('report.html')
+		except:
+			return render_template('signin.html')
+	else:
+		user = User.query.filter_by(token=json_data['token']).first()
+		if user:
+			session['logged_in'] = True
+			session['user'] = user.username
+			return render_template('report.html')
 
 @app.route('/icons', methods=['GET'])
 def icons():
@@ -116,7 +123,7 @@ def signup():
 def get_report(report):
 	content = request.get_json()
 
-	path = os.path.join(os.getcwd(),'report', report)
+	path = os.path.join(REPORT_SAVE_DIRECTORY, report)
 	with open(path,'w') as f:
 		f.write(str(content))
 
