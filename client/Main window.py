@@ -98,11 +98,13 @@ class Ui_MainWindow(QWidget):
         self.id = self.ID_txt.toPlainText()
         self.password = self.PW_txt.toPlainText()
 
-        test = conn.login()
-        if True != test.login_start(self.id, self.password):
+        login_class = conn.login()
+        user_token = login_class.login_start(self.id, self.password)
+        if None == user_token:
             self.err_messagebox()
 
         else:
+            conn.server_data.USER_TOKEN = user_token
             self.hide()
             self.UI = Ui_Info(self.id, (urlopen('http://ip.42.pl/raw').read()).decode())
             self.UI.show()

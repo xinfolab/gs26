@@ -13,10 +13,12 @@ LOGIN_TEST = 0
 class login:
     id = None
     password = None
+    token = None
 
     def set_sending_data(self):
         data = OrderedDict()
 
+        data["client"]= "true"
         data["email"] = self.id
         data["password"] = self.password
 
@@ -31,10 +33,10 @@ class login:
         res = requests.post(url,data=data, headers=headers)
         data = json.loads(res.text)
 
-        if True != data['result']:
-            return False
-
-        # print(res.text)
+        if False == data['result']:
+            return None
+        else:
+            self.token = data['result']
 
         return True
 
@@ -48,9 +50,9 @@ class login:
 
         if True != self.send_info():
             print("send_info function err!!")
-            return False
+            return None
 
-        return True
+        return self.token
 
 
 if 1 == LOGIN_TEST:

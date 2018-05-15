@@ -22,14 +22,25 @@ def make_format(session_id, report):
 def send_report(report):
     save_time_data = time.localtime()
     time_format = "%04d%02d%02d%02d%02d%02d" % (save_time_data.tm_year, save_time_data.tm_mon, save_time_data.tm_mday, save_time_data.tm_hour, save_time_data.tm_min, save_time_data.tm_sec)
-    url = conn.server_data.server + conn.server_data.REPORT_PARAMETER + time_format
+    url = conn.server_data.server + conn.server_data.REPORT_SAVE_PARAMETER  + time_format
     headers = conn.server_data.json_type_headers
 
     res = requests.post(url, headers=headers, data=json.dumps(report))
 
     print(res)
 
+def send_token():
+    url = conn.server_data.server + conn.server_data.REPORT_TOKEN_PARAMETER
+    data = conn.server_data.USER_TOKEN
+
+    res = requests.post(url,data=data)
+
+    print(res)
+
 def test_json_data_set():
+
+
+
     ip_list = ["1234","1234","1234","1234"]
     reg_list = ["test1","test2","test3","test4"]
     hash_dic = {"file1":"hash1", "file2":"hash2","file3":"hash3","file4":"hash4"}
@@ -52,15 +63,6 @@ def test_json_data_set():
 
     return total
 
-def test_json_data_load(json_data):
-    data = json_data
-    # data = json.loads(json_data)
-
-    print(data["user"])
-    print(data["report"]["ip"])
-    print(data["report"]["reg"])
-    print(data["report"]["hash"])
-    print(data["report"]["file"])
 
 
 if JSON_SET_TEST is 1:
