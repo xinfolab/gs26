@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QLabel, QApplication, QPushButton, QDialog, QTableWi
 from PyQt5.QtGui import QPixmap, QIcon
 from GotoTray import GoTrayUI
 from collections import OrderedDict
-from time import sleep
+
 class get_ip_thread(QThread):
     gipEvent = QtCore.pyqtSignal(list)
 
