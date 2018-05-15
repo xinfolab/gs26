@@ -501,7 +501,7 @@ demo = {
 
       $.notify({
           icon: "now-ui-icons ui-1_bell-53",
-          message: msg + ", GoodBye!"
+          message: "<b>" + msg + "</b>, GoodBye!"
 
         },{
             type: color,

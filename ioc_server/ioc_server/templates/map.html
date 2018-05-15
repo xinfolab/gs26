@@ -17,4 +17,25 @@
                     </div>
                 </div>
             </div>
+
+            <script>
+                function initMap() {
+                // Create a map object and specify the DOM element for display.
+                var myLatLng = {lat: 35.142891, lng: 126.932002};
+
+                var map = new google.maps.Map(document.getElementById('map'), {
+                  center: myLatLng,
+                  zoom: 17
+                });
+
+                var marker = new google.maps.Marker({
+                  map: map,
+                  position: myLatLng,
+                  title: 'Hello World!'
+                });
+                }
+            </script>
+
+<!--  Google Maps Plugin    -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo14gsMTplvZUpyON0yThesfVZd6xy2jo&callback=initMap"></script>
 {% include 'footer.html' %}

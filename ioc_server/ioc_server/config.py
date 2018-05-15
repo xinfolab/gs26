@@ -1,5 +1,5 @@
 import os
-
+from datetime import timedelta
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -12,3 +12,4 @@ class BaseConfig(object):
 	UPDATE_FOLDER = 'update'
 	UPLOAD_FOLDER = 'upload'
 	CLIENT_FOLDER = '/home/gs26/gs26/ioc_server/ioc_server/static/client'
+	PERMANENT_SESSION_LIFETIME = timedelta(minutes=10)
