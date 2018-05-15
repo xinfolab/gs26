@@ -112,6 +112,7 @@ class Ui_Processing(QDialog):
         self.close_Btn.move(back.width()-40,20)
         self.close_Btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
+        
         ### GIF set
         self.moviee = QLabel(self)
         self.movie = QtGui.QMovie(".\\img\\Processing.gif")
@@ -164,7 +165,12 @@ class Ui_Processing(QDialog):
         self.tableWidget.setColumnWidth(0, self.tableWidget.width()/5.5)
         self.tableWidget.setColumnWidth(1, self.tableWidget.width()/2.5)
         self.tableWidget.setColumnWidth(2, self.tableWidget.width()/2.5)
-        
+
+        ### Table Widget Label Warning, Notice set
+        self.warn = QLabel(self)
+        self.warn_img = QPixmap('.\\img\\Warning.png')
+        self.Notice = QLabel(self)
+        self.Notice_img = QPixmap('.\\img\\Notice.png') 
 
         ### Btn Clicked
         self.P_btn.clicked.connect(self.P_btn_clicked)
@@ -212,7 +218,8 @@ class Ui_Processing(QDialog):
         self.report["ip"] = ip_data
 
         for k in ip_data:
-            self.tableWidget.setItem(i, 0, QTableWidgetItem("Warning"))
+            self.Notice.setPixmap(self.Notice_img)
+            self.tableWidget.setCellWidget(i,0,self.Notice)
             self.tableWidget.setItem(i, 1, QTableWidgetItem(k))
             self.tableWidget.setItem(i, 2, QTableWidgetItem(""))
             i = i + 1
@@ -236,7 +243,8 @@ class Ui_Processing(QDialog):
         self.report["registry"] = reg_data
 
         for reg_k in reg_data:
-            self.tableWidget.setItem(i, 0, QTableWidgetItem("Warning"))
+            self.Notice.setPixmap(self.Notice_img)
+            self.tableWidget.setCellWidget(i,0,self.Notice)
             self.tableWidget.setItem(i, 1, QTableWidgetItem(reg_k))
             self.tableWidget.setItem(i, 2, QTableWidgetItem(""))
             i = i + 1
@@ -260,7 +268,8 @@ class Ui_Processing(QDialog):
         self.report["process"] = proc_data
 
         for proc_k in proc_data.keys():
-            self.tableWidget.setItem(i, 0, QTableWidgetItem("Warning"))
+            self.Notice.setPixmap(self.Notice_img)
+            self.tableWidget.setCellWidget(i,0,self.Notice)
             self.tableWidget.setItem(i, 1, QTableWidgetItem(proc_k))
             self.tableWidget.setItem(i, 2, QTableWidgetItem(proc_data[proc_k]))
             i = i + 1
@@ -285,9 +294,18 @@ class Ui_Processing(QDialog):
 
         for k in file_data.keys():
             if file_data[k] == "":
-                self.tableWidget.setItem(i, 0, QTableWidgetItem("Info"))
+                ### Table widget - info Label
+                self.warn = QLabel(self)
+                self.warn_img = QPixmap('.\\img\\Warning.png')
+                self.warn.setPixmap(self.warn_img)
+                self.tableWidget.setCellWidget(i,0,self.warn)
+
             else:
-                self.tableWidget.setItem(i, 0, QTableWidgetItem("Warning"))
+                ### Table widget - Warn Label
+                self.Notice = QLabel(self)
+                self.Notice_img = QPixmap('.\\img\\Notice.png') 
+                self.Notice.setPixmap(self.Notice_img)
+                self.tableWidget.setCellWidget(i,0,self.Notice)
 
             self.tableWidget.setItem(i, 1, QTableWidgetItem(k))
             self.tableWidget.setItem(i, 2, QTableWidgetItem(file_data[k]))
