@@ -324,9 +324,13 @@ class Ui_Processing(QDialog):
             complete_report = conn.make_format(self.user_id, self.report)
             conn.send_report(complete_report)
 
+            self.P_btn.setVisible(False)
+            self.S_btn.setVisible(True)
+            self.movie.stop()
+
             conn.web_open()
 
-       ### clicked btn event show and hide
+            ### clicked btn event show and hide
     def P_btn_clicked(self):
         self.P_btn.setVisible(False)
         self.C_btn.setVisible(True)
@@ -356,11 +360,6 @@ class Ui_Processing(QDialog):
 
         self.UI = GoTrayUI()
         self.UI.show()
-
-###    def search completed then open Completed GUI
-###        self.hide()
-#          self.UI = Ui_completed()
-###        UI.show()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
