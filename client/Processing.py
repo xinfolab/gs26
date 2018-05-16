@@ -88,7 +88,8 @@ class Ui_Processing(QDialog):
     count = 0
     report = OrderedDict()
 
-    def __init__(self):
+    def __init__(self, id ):
+        self.user_id = id
 
         super().__init__()
 
@@ -320,10 +321,10 @@ class Ui_Processing(QDialog):
     @pyqtSlot(int)
     def reportThreadEventHandler(self, count):
         if count <= 0:
-            complete_report = conn.make_format("test@test.com", self.report)
+            complete_report = conn.make_format(self.user_id, self.report)
             conn.send_report(complete_report)
 
-            data = conn.send_token()
+            conn.web_open()
 
        ### clicked btn event show and hide
     def P_btn_clicked(self):
