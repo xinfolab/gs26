@@ -1,5 +1,6 @@
 import sys
 from urllib.request import urlopen
+import webbrowser
 import conn
 
 from PyQt5 import QtCore, QtGui
@@ -84,7 +85,12 @@ class Ui_MainWindow(QWidget):
         sin_btn.clicked.connect(self.sin_btn_clicked)
 ###        sup_btn.clicked.connect(self.sup_btn_clicked)
 
+        sup_btn.clicked.connect(self.sup_btn_clicked)
+
         self.show()
+
+    def sup_btn_clicked(self):
+        webbrowser.open('http://117.16.11.8:8888/signup#!/register')
 
     def err_messagebox(self):
         msg = QMessageBox()
