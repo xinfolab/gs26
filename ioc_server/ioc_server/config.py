@@ -12,4 +12,6 @@ class BaseConfig(object):
 	UPDATE_FOLDER = 'update'
 	UPLOAD_FOLDER = 'upload'
 	CLIENT_FOLDER = '/home/gs26/gs26/ioc_server/ioc_server/static/client'
+	REPORT_SAVE_DIRECTORY = '/home/gs26/gs26/ioc_server/ioc_server/report'
+	IOC_DOWNLOAD_DIRECTORY = '/home/gs26/gs26/ioc_server/ioc_server/update'
 	PERMANENT_SESSION_LIFETIME = timedelta(minutes=10)
