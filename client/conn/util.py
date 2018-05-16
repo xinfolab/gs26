@@ -2,6 +2,7 @@ import json
 import time
 import conn.server_data
 import requests
+import os
 from collections import OrderedDict
 from seleniumrequests import Chrome
 
@@ -18,7 +19,7 @@ def make_format(session_id, report):
     ready_data["user"] = session_id
     ready_data["report"] = report
 
-    return ready_data
+    return json.dumps(ready_data)
 
 def send_report(report):
     save_time_data = time.localtime()
@@ -35,10 +36,13 @@ def web_open():
     headers = conn.server_data.json_type_headers
     data={}
     data['token']=conn.server_data.USER_TOKEN
-
-    path = '.\\conn\\chromedriver.exe'
+    path_token = os.getcwd()
+    path = path_token + '\\conn\\chromedriver.exe'
     browser = Chrome(path)
-    browser.request('POST', url, headers=headers, data=json.dumps(data))
+    res = browser.request('POST', url, headers=headers, data=json.dumps(data))
+    print(url)
+    print(res.cookies)
+
     browser.get(url)
 
 def web_test():
@@ -56,9 +60,6 @@ def web_test():
     browser.get(url)
 
 def test_json_data_set():
-
-
-
     ip_list = ["1234","1234","1234","1234"]
     reg_list = ["test1","test2","test3","test4"]
     hash_dic = {"file1":"hash1", "file2":"hash2","file3":"hash3","file4":"hash4"}
@@ -82,10 +83,21 @@ def test_json_data_set():
     return total
 
 
+def json_read_test():
+    data = ""
+    with open("C:\\gs26\\ioc_server\\ioc_server\\report\\20180516134556","r") as f:
+        data = f.readline()
+
+    test = json.loads(data)
+
+    print(test)
+
+    print(data)
 
 if JSON_SET_TEST is 1:
     # report = OrderedDict()
     # report = test_json_data_set()
     # test_json_data_load(report)
     # send_report(report)
-    web_test()
+    # web_test()
+    json_read_test()
