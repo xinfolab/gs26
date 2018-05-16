@@ -72,7 +72,7 @@ class Ui_Info(QDialog):
     ### start_search click
     def start_search(self):
         self.hide()
-        self.UI = Ui_Processing()
+        self.UI = Ui_Processing(self.user_id)
         self.UI.show()
 
     def report_view(self):

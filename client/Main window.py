@@ -100,7 +100,7 @@ class Ui_MainWindow(QWidget):
 
         login_class = conn.login()
         user_token = login_class.login_start(self.id, self.password)
-        if None == user_token:
+        if False == user_token:
             self.err_messagebox()
 
         else:
@@ -108,6 +108,7 @@ class Ui_MainWindow(QWidget):
             self.hide()
             self.UI = Ui_Info(self.id, (urlopen('http://ip.42.pl/raw').read()).decode())
             self.UI.show()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

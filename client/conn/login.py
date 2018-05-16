@@ -50,7 +50,7 @@ class login:
 
         if True != self.send_info():
             print("send_info function err!!")
-            return None
+            return False
 
         return self.token
 

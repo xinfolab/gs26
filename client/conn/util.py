@@ -3,6 +3,7 @@ import time
 import conn.server_data
 import requests
 from collections import OrderedDict
+from seleniumrequests import Chrome
 
 JSON_SET_TEST = 0
 
@@ -29,13 +30,30 @@ def send_report(report):
 
     print(res)
 
-def send_token():
+def web_open():
     url = conn.server_data.server + conn.server_data.REPORT_TOKEN_PARAMETER
-    data = conn.server_data.USER_TOKEN
+    headers = conn.server_data.json_type_headers
+    data={}
+    data['token']=conn.server_data.USER_TOKEN
 
-    res = requests.post(url,data=data)
+    path = '.\\conn\\chromedriver.exe'
+    browser = Chrome(path)
+    browser.request('POST', url, headers=headers, data=json.dumps(data))
+    browser.get(url)
 
-    print(res)
+def web_test():
+
+    url = conn.server_data.server + conn.server_data.REPORT_TOKEN_PARAMETER
+    headers = conn.server_data.json_type_headers
+    data = {}
+    data['token']= '02cda594401840ec955c81533bc761d4'
+
+    path = 'C:\gs26\client\conn\chromedriver.exe'
+    browser = Chrome(path)
+
+    r = browser.request('POST', url, headers=headers, data=json.dumps(data))
+    print(r.cookies)
+    browser.get(url)
 
 def test_json_data_set():
 
@@ -67,6 +85,7 @@ def test_json_data_set():
 
 if JSON_SET_TEST is 1:
     # report = OrderedDict()
-    report = test_json_data_set()
+    # report = test_json_data_set()
     # test_json_data_load(report)
-    send_report(report)
+    # send_report(report)
+    web_test()
