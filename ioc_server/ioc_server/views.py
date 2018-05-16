@@ -15,8 +15,6 @@ import re
 import json
 from werkzeug.datastructures import Headers
 
-IOC_DOWNLOAD_DIRECTORY = '/home/gs26/gs26/ioc_server/ioc_server/update'
-
 @app.route('/')
 def main():
 	return render_template('main.html')
@@ -42,17 +40,23 @@ def download():
 @app.route('/report', methods=['GET', 'POST'])
 def report():
 	try:
-		if session['logged_in'] == False:
-			json_data = request.json
-			user = User.query.filter_by(token=json_data['token']).first()
-			if user:
-				session['logged_in'] = True
-				session['user'] = user.username
-				return render_template('report.html')
-			return redirect('/signin', code=302)
-		return render_template('report.html')
-	except:
-		return render_template('signin.html')
+		json_data = request.json
+	except Exception as e:
+		json_data = None
+
+	if json_data is None:
+		try:
+			if session['logged_in'] == False:
+				return redirect('/signin', code=302)
+			return render_template('report.html')
+		except:
+			return render_template('signin.html')
+	else:
+		user = User.query.filter_by(token=json_data['token']).first()
+		if user:
+			session['logged_in'] = True
+			session['user'] = user.username
+			return render_template('report.html')
 
 @app.route('/icons', methods=['GET'])
 def icons():
@@ -116,7 +120,7 @@ def signup():
 def get_report(report):
 	content = request.get_json()
 
-	path = os.path.join(os.getcwd(),'report', report)
+	path = os.path.join(app.config['REPORT_SAVE_DIRECTORY'], report)
 	with open(path,'w') as f:
 		f.write(str(content))
 
@@ -128,14 +132,14 @@ def get_report(report):
 
 @app.route('/update/all_file_list', methods=['GET'])
 def update_file_list():
-	filenames = os.listdir(IOC_DOWNLOAD_DIRECTORY)
+	filenames = os.listdir(app.config['IOC_DOWNLOAD_DIRECTORY'])
 
 	return str(filenames)
 
 @app.route('/update/<filename>', methods=['GET'])
 def download_file(filename):
 	files = filename.encode('utf-8')
-	full_path = os.path.join(IOC_DOWNLOAD_DIRECTORY,filename)
+	full_path = os.path.join(app.config['IOC_DOWNLOAD_DIRECTORY'],filename)
 	headers = Headers()
 	headers.add('Content-Disposition', 'attachment', filename=files)
 	headers['Content-Length']= os.path.getsize(full_path)
@@ -213,7 +217,7 @@ def status():
 def getreport():
 	json_data = request.json
 	user = User.query.filter_by(username=json_data['username']).first()
-	report_dir = './ioc_server/reports/'+user.token+'/'
+	report_dir = './ioc_server/parsed/'+user.token+'/'
 	report_list = os.listdir(report_dir)
 	result = {}
 	for i in range(len(report_list)):
@@ -235,3 +239,9 @@ def username():
 			return jsonify({'username': False})
 	except:
 		return jsonify({'username': False})
+
+@app.route('/api/parsingreport', methods=['GET'])
+def parsing():
+	parsing_list = os.listdir(app.config['REPORT_SAVE_DIRECTORY'])
+	for i in range(len(parsing_list)):
+		print(parsing_list[i])
