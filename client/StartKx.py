@@ -78,6 +78,16 @@ class Ui_Info(QDialog):
     def report_view(self):
         webbrowser.open("https://www.naver.com")
 
+    ### MousePressEvent & MouseMoveEvent = drag window
+    def mousePressEvent(self, event):
+        self.offset = event.pos()
+
+    def mouseMoveEvent(self, event):
+        x=event.globalX()
+        y=event.globalY()
+        x_w = self.offset.x()
+        y_w = self.offset.y()
+        self.move(x-x_w, y-y_w)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

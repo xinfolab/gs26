@@ -362,6 +362,18 @@ class Ui_Processing(QDialog):
         self.UI.show()
         self.proc_self = self
         GotoTray.proc_self = self.proc_self
+
+    ### MousePressEvent & MouseMoveEvent = drag window
+    def mousePressEvent(self, event):
+        self.offset = event.pos()
+
+    def mouseMoveEvent(self, event):
+        x=event.globalX()
+        y=event.globalY()
+        x_w = self.offset.x()
+        y_w = self.offset.y()
+        self.move(x-x_w, y-y_w)
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     UI = Ui_Processing()
