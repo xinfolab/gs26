@@ -114,9 +114,8 @@ angular.module('myApp').controller('logoutController',
       // call logout from service
       AuthService.logout()
         .then(function () {
-          location.href="/signin";
           $location.path('/login');
-          window.setTimeout("location.reload();", 2000);
+          window.setTimeout("location.href='/signin';", 2000);
         });
     };
 
