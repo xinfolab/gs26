@@ -1,9 +1,11 @@
-import sys
+﻿import sys
 
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import QApplication, QLabel, QCheckBox, QSystemTrayIcon,QDialog, QMenu, QAction, QPushButton
 from PyQt5.QtGui import QPixmap, QFont, QIcon
  
+proc_self = 0
+
 class GoTrayUI(QDialog):
  
     def __init__(self):
@@ -12,8 +14,6 @@ class GoTrayUI(QDialog):
         self.GotoTrayUI()
 
     def GotoTrayUI(self):
-        check_box = True
-        tray_icon = None
 
         ### Font configure
         font = QtGui.QFont()
@@ -63,10 +63,10 @@ class GoTrayUI(QDialog):
         self.tray_icon.setIcon(QIcon('.\\img\\Icon.png'))
         show_action = QAction("실행", self)
         quit_action = QAction("종료", self)
-        
-        ### Tray Icon menu - 실행 - Processing으로 복귀 # add show process_UI
-        ### show_action.triggered.connect()
-        
+        self.tray_icon.show()
+
+        ### Tray Icon menu - 실행 - show process_UI
+        show_action.triggered.connect(self.active_tray)
         ### Tray Icon menu - 종료 - exit
         quit_action.triggered.connect(QApplication.quit)
         tray_menu = QMenu()
@@ -83,14 +83,15 @@ class GoTrayUI(QDialog):
     ### Check box Click 에 대한.
     def closeEvent(self):
         if self.check_box.isChecked():
-            ### add hiding process_UI
             self.hide()
-            self.tray_icon.show()
-            
+            ### processing UI hide set
+            self = proc_self
+            self.hide()
         else:
             exit()
-            
- 
+    def active_tray(self):
+        self = proc_self
+        self.show()
  
 if __name__ == "__main__":
 

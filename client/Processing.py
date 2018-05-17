@@ -7,8 +7,8 @@ from PyQt5.QtCore import *
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtWidgets import QLabel, QApplication, QPushButton, QDialog, QTableWidget, QTableWidgetItem
 from PyQt5.QtGui import QPixmap, QIcon
-from GotoTray import GoTrayUI
 from collections import OrderedDict
+import GotoTray
 
 class get_ip_thread(QThread):
     gipEvent = QtCore.pyqtSignal(list)
@@ -358,9 +358,10 @@ class Ui_Processing(QDialog):
     ### Close_Btn_clicked = Go Tray or Exit
     def close_Btn_clicked(self):
 
-        self.UI = GoTrayUI()
+        self.UI = GotoTray.GoTrayUI()
         self.UI.show()
-
+        self.proc_self = self
+        GotoTray.proc_self = self.proc_self
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     UI = Ui_Processing()
