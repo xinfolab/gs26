@@ -6,267 +6,148 @@
             </div>
             <div class="content">
                 <div class="row">
-                    <div class="col-lg-4">
-                        <div class="card card-chart">
+                    <div class="col-md-12">
+                        <div class="card">
                             <div class="card-header">
-                                <h5 class="card-category">Global Sales</h5>
-                                <h4 class="card-title">Shipped Products</h4>
-                                <div class="dropdown">
-                                    <button type="button" class="btn btn-round btn-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown">
-                                        <i class="now-ui-icons loader_gear"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <a class="dropdown-item" href="#">Something else here</a>
-                                        <a class="dropdown-item text-danger" href="#">Remove Data</a>
-                                    </div>
-                                </div>
+                                <h4 class="card-title"> Result Report</h4>
                             </div>
                             <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="lineChartExample"></canvas>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <div class="stats">
-                                    <i class="now-ui-icons arrows-1_refresh-69"></i> Just Updated
+                                <div class="table-responsive">
+	                                {% for name in report_name %}
+                                		<a href= "/report/{{name}}" class="btn btn-default col-md-2" ng-disabled="disabled" style="color: white;"><b>{{ "{}/{}/{} {}:{}:{}".format(name[:4], name[4:6], name[6:8], name[8:10], name[10:12], name[12:14]) }}</b></a>
+	                                {% endfor %}
+                                    <table class="table">
+		                                <div class="alert alert-info">
+		                                    <span>FILE</span>
+		                                </div>
+                                        <thead class="text-primary">
+                                            <th width="100px">
+                                                RISK
+                                            </th>
+                                            <th>
+                                                FILE PATH
+                                            </th>
+                                            <th>
+                                                HASH
+                                            </th>
+                                        </thead>
+                                        <tbody>
+                                        	{% for data in report_data[0] %}
+	                                            <tr>
+	                                                <td>
+	                                                    {% if data[0] and data[1] %}
+							                                <span class="text-danger"><b>NOTICE</b></span>
+							                            {% else %}
+						                                    <span class="text-warning"><b>WARNING</b></span>
+	                                                    {% endif %}
+	                                                </td>
+	                                                <td>
+	                                                    {{ data[0] }}
+	                                                </td>
+	                                                <td>
+	                                                	{% if data[1] %}
+	                                                    	{{ data[1] }}
+	                                                	{% else %}
+	                                                		<span>{{ 'a'*64 }}</span>
+	                                                	{% endif %}
+	                                                </td>
+	                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <table class="table">
+		                                <div class="alert alert-info">
+		                                    <span>PROCESS</span>
+		                                </div>
+                                        <thead class=" text-primary">
+                                            <th width="100px">
+                                                RISK
+                                            </th>
+                                            <th>
+                                                FILE PATH
+                                            </th>
+                                            <th>
+                                                HASH
+                                            </th>
+                                        </thead>
+                                        <tbody>
+                                        	{% for data in report_data[1] %}
+	                                            <tr>
+	                                                <td>
+	                                                    {% if data[0] and data[1] %}
+							                                <span class="text-danger"><b>NOTICE</b></span>
+							                            {% else %}
+						                                    <span class="text-warning"><b>WARNING</b></span>
+	                                                    {% endif %}
+	                                                </td>
+	                                                <td>
+	                                                    {{ data }}
+	                                                </td>
+	                                                <td>
+	                                                	{% if data[1] %}
+	                                                    	{{ data[1] }}
+	                                                	{% else %}
+	                                                		<span>null</span>
+	                                                	{% endif %}
+	                                                </td>
+	                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <table class="table">
+		                                <div class="alert alert-info">
+		                                    <span>IP</span>
+		                                </div>
+                                        <thead class=" text-primary">
+                                            <th width="100px">
+                                                RISK
+                                            </th>
+                                            <th>
+                                                IP ADDRESS
+                                            </th>
+                                        </thead>
+                                        <tbody>
+                                        	{% for data in report_data[2] %}
+	                                            <tr>
+	                                                <td>
+	                                                    <span class="text-danger"><b>NOTICE</b></span>
+	                                                </td>
+	                                                <td>
+	                                                    {{ data }}
+	                                                </td>
+	                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <table class="table">
+		                                <div class="alert alert-info">
+		                                    <span>REGISTRY</span>
+		                                </div>
+                                        <thead class=" text-primary">
+                                            <th width="100px">
+                                                RISK
+                                            </th>
+                                            <th>
+                                                KEY
+                                            </th>
+                                        </thead>
+                                        <tbody>
+                                        	{% for data in report_data[3] %}
+	                                            <tr>
+	                                                <td>
+	                                                    <span class="text-danger"><b>NOTICE</b></span>
+	                                                </td>
+	                                                <td>
+	                                                    {{ data }}
+	                                                </td>
+	                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card card-chart">
-                            <div class="card-header">
-                                <h5 class="card-category">2018 Sales</h5>
-                                <h4 class="card-title">All products</h4>
-                                <div class="dropdown">
-                                    <button type="button" class="btn btn-round btn-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown">
-                                        <i class="now-ui-icons loader_gear"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <a class="dropdown-item" href="#">Something else here</a>
-                                        <a class="dropdown-item text-danger" href="#">Remove Data</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="lineChartExampleWithNumbersAndGrid"></canvas>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <div class="stats">
-                                    <i class="now-ui-icons arrows-1_refresh-69"></i> Just Updated
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card card-chart">
-                            <div class="card-header">
-                                <h5 class="card-category">Email Statistics</h5>
-                                <h4 class="card-title">24 Hours Performance</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="barChartSimpleGradientsNumbers"></canvas>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <div class="stats">
-                                    <i class="now-ui-icons ui-2_time-alarm"></i> Last 7 days
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="card card-tasks">
-                      <div class="card-header">
-                        <h5 class="card-category">Backend development</h5>
-                        <h4 class="card-title">Tasks</h4>
-                      </div>
-                      <div class="card-body">
-                        <div class="table-full-width table-responsive">
-                          <table class="table">
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="form-check">
-                                            <label class="form-check-label">
-                                                <input class="form-check-input" type="checkbox" checked="">
-                                                <span class="form-check-sign"></span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td class="text-left">Sign contract for "What are conference organizers afraid of?"</td>
-                                    <td class="td-actions text-right">
-                                        <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task">
-                                            <i class="now-ui-icons ui-2_settings-90"></i>
-                                        </button>
-                                        <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove">
-                                            <i class="now-ui-icons ui-1_simple-remove"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="form-check">
-                                            <label class="form-check-label">
-                                                <input class="form-check-input" type="checkbox">
-                                                <span class="form-check-sign"></span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td class="text-left">Lines From Great Russian Literature? Or E-mails From My Boss?</td>
-                                    <td class="td-actions text-right">
-                                        <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task">
-                                            <i class="now-ui-icons ui-2_settings-90"></i>
-                                        </button>
-                                        <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove">
-                                            <i class="now-ui-icons ui-1_simple-remove"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="form-check">
-                                            <label class="form-check-label">
-                                                <input class="form-check-input" type="checkbox" checked="">
-                                                <span class="form-check-sign"></span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td class="text-left">Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit
-                                    </td>
-                                    <td class="td-actions text-right">
-                                        <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task">
-                                            <i class="now-ui-icons ui-2_settings-90"></i>
-                                        </button>
-                                        <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove">
-                                            <i class="now-ui-icons ui-1_simple-remove"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                      <div class="card-footer">
-                        <hr>
-                        <div class="stats">
-                          <i class="now-ui-icons loader_refresh spin"></i> Updated 3 minutes ago
-                        </div>
-                      </div>
-                  </div>
-                  </div>
-                  <div class="col-md-6">
-                      <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-category">All Persons List</h5>
-                            <h4 class="card-title"> Employees Stats</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                              <table class="table">
-                                <thead class=" text-primary">
-                                  <th >
-                                    Name
-                                  </th>
-                                  <th >
-                                    Country
-                                  </th>
-                                  <th >
-                                    City
-                                  </th>
-                                  <th  class="text-right" >
-                                    Salary
-                                  </th>
-                                </thead>
-                                <tbody>
-                                  <tr >
-                                    <td >
-                                      Dakota Rice
-                                    </td>
-                                    <td >
-                                      Niger
-                                    </td>
-                                    <td >
-                                      Oud-Turnhout
-                                    </td>
-                                    <td  class="text-right" >
-                                      $36,738
-                                    </td>
-                                  </tr>
-                                  <tr >
-                                    <td >
-                                      Minerva Hooper
-                                    </td>
-                                    <td >
-                                      Curaçao
-                                    </td>
-                                    <td >
-                                      Sinaai-Waas
-                                    </td>
-                                    <td  class="text-right" >
-                                      $23,789
-                                    </td>
-                                  </tr>
-                                  <tr >
-                                    <td >
-                                      Sage Rodriguez
-                                    </td>
-                                    <td >
-                                      Netherlands
-                                    </td>
-                                    <td >
-                                      Baileux
-                                    </td>
-                                    <td  class="text-right" >
-                                      $56,142
-                                    </td>
-                                  </tr>
-                                  <tr >
-                                    <td >
-                                      Doris Greene
-                                    </td>
-                                    <td >
-                                      Malawi
-                                    </td>
-                                    <td >
-                                      Feldkirchen in Kärnten
-                                    </td>
-                                    <td  class="text-right" >
-                                      $63,542
-                                    </td>
-                                  </tr>
-                                  <tr >
-                                    <td >
-                                      Mason Porter
-                                    </td>
-                                    <td >
-                                      Chile
-                                    </td>
-                                    <td >
-                                      Gloucester
-                                    </td>
-                                    <td  class="text-right" >
-                                      $78,615
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                        </div>
-                      </div>
-                  </div>
                 </div>
             </div>
 {% include 'footer.html' %}
