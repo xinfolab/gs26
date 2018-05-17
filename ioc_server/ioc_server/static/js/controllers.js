@@ -14,31 +14,6 @@ angular.module('myApp').controller('menuController',
        'class': 'arrows-1_cloud-download-93',
      },
      {
-       'name': 'icons',
-       'url': 'icons',
-       'class': 'education_atom',
-     },
-     {
-       'name': 'map',
-       'url': 'map',
-       'class': 'location_map-big',
-     },
-     {
-       'name': 'notice',
-       'url': 'notice',
-       'class': 'ui-1_bell-53',
-     },
-     {
-       'name': 'table list',
-       'url': 'tables',
-       'class': 'design_bullet-list-67',
-     },
-     {
-       'name': 'typography',
-       'url': 'typography',
-       'class': 'text_caps-small',
-     },
-     {
        'name': 'registration',
        'url': 'signup#!/register',
        'class': 'users_single-02',
@@ -47,6 +22,11 @@ angular.module('myApp').controller('menuController',
        'name': 'sign in',
        'url': 'signin#!/login',
        'class': 'users_single-02',
+     },
+     {
+       'name': 'contact us',
+       'url': 'contact',
+       'class': 'location_map-big',
      }
      ];  
 
