@@ -47,14 +47,9 @@ def icons():
 	except:
 		return render_template('signin.html')
 
-@app.route('/map', methods=['GET'])
-def map():
-	try:
-		if session['logged_in'] == False:
-			return redirect('/signin', code=302)
-		return render_template('map.html')
-	except:
-		return render_template('signin.html')
+@app.route('/contact', methods=['GET'])
+def contact():
+	return render_template('contact.html')
 
 @app.route('/tables', methods=['GET'])
 def tables():
@@ -222,8 +217,15 @@ def report():
 				return redirect('/signin', code=302)
 
 			report_name = parsing('name')
-			report_data = parsing('data', report_name[0])
-			return render_template('report.html', report_name=report_name, report_data=report_data)
+			if report_name == []:
+				report_data = [[],[],[],[],[]]
+			else:
+				report_data = parsing('data', report_name[0])
+				report_count = parsing('count')
+
+			#debug
+			print(report_count)
+			return render_template('report.html', report_name=report_name, report_data=report_data, report_count=report_count)
 		except:
 			return render_template('signin.html')
 	else:
@@ -236,16 +238,19 @@ def report():
 		except:
 			return render_template('signin.html')
 
-@app.route('/report/<report_name>', methods=['GET'])
-def reportview():
-	report_data = parsing('data', report_name)
-	return render_template('report.html')
+@app.route('/report/<specific_name>', methods=['GET'])
+def reportview(specific_name):
+	report_name = parsing('name')
+	report_data = parsing('data', specific_name)
+	report_count = parsing('count')
+	return render_template('report.html', report_name=report_name, report_data=report_data, report_count=report_count)
 
 def getreport(report_dir, parsing_name):
 	file_result = []
 	proc_result = []
 	ip_result = []
 	reg_result = []
+	count = 0
 	result = []
 
 	with open(os.path.join(report_dir, parsing_name)) as f:
@@ -256,23 +261,40 @@ def getreport(report_dir, parsing_name):
 	for key, value in data['report']['file'].items():
 		temp = [key, value]
 		file_result.append(temp)
+		count += 1
 
 	for key, value in data['report']['process'].items():
 		temp = [key, value]
 		proc_result.append(temp)
+		count += 1
 
 	for i in data['report']['ip']:
 		ip_result.append(i)
+		count += 1
 
 	for i in data['report']['registry']:
 		reg_result.append(i)
+		count += 1
 
 	result.append(file_result)
 	result.append(proc_result)
 	result.append(ip_result)
 	result.append(reg_result)
+	result.append(count)
 	return result
 
+def getcount(report_dir, report_list):
+	count = []
+	for i in range(len(report_list)):
+		with open(os.path.join(report_dir, report_list[i])) as f:
+			data = f.readline()
+		data = json.loads(data)
+		count.append(len(data['report']['file']))
+		count[i] += len(data['report']['process'])
+		count[i] += len(data['report']['ip'])
+		count[i] += len(data['report']['registry'])
+
+	return count
 
 #report[file, registry, ip, process,], user
 
@@ -285,8 +307,12 @@ def parsing(classification, parsing_name = None):
 		if classification == 'name':
 			return report_list[::-1]
 		elif classification == 'data':
-			result_report = getreport(report_dir, parsing_name)
+			report_result = getreport(report_dir, parsing_name)
+			return report_result
+		elif classification == 'count':
+			report_count = getcount(report_dir, report_list)
+			return report_count
 
-		return result_report
+		
 	except Exception as e:
 		print(e)
