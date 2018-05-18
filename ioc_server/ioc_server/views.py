@@ -304,6 +304,7 @@ def parsing(classification, parsing_name = None):
 		user = User.query.filter_by(username=username).first()
 		report_dir = os.path.join(app.config['REPORT_SAVE_DIRECTORY'],user.token)
 		report_list = os.listdir(report_dir)
+		report_list.sort()
 		if classification == 'name':
 			return report_list[::-1]
 		elif classification == 'data':
