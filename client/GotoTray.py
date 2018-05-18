@@ -1,9 +1,11 @@
-import sys
+﻿import sys
 
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import QApplication, QLabel, QCheckBox, QSystemTrayIcon,QDialog, QMenu, QAction, QPushButton
 from PyQt5.QtGui import QPixmap, QFont, QIcon
  
+proc_self = 0
+
 class GoTrayUI(QDialog):
  
     def __init__(self):
@@ -12,8 +14,6 @@ class GoTrayUI(QDialog):
         self.GotoTrayUI()
 
     def GotoTrayUI(self):
-        check_box = True
-        tray_icon = None
 
         ### Font configure
         font = QtGui.QFont()
@@ -64,34 +64,58 @@ class GoTrayUI(QDialog):
         show_action = QAction("실행", self)
         quit_action = QAction("종료", self)
         
-        ### Tray Icon menu - 실행 - Processing으로 복귀 # add show process_UI
-        ### show_action.triggered.connect()
-        
+
+        ### Tray Icon menu - 실행 - show process_UI
+        show_action.triggered.connect(self.active_tray)
         ### Tray Icon menu - 종료 - exit
         quit_action.triggered.connect(QApplication.quit)
         tray_menu = QMenu()
         tray_menu.addAction(show_action)
         tray_menu.addAction(quit_action)
 
+        ### Tray_menu set
         self.tray_icon.setContextMenu(tray_menu)
 
         Cancel_btn.clicked.connect(self.hide)
         Close_btn.clicked.connect(self.closeEvent)
         Exit_btn.clicked.connect(self.closeEvent)
-        self.show()
-    
-    ### Check box Click 에 대한.
+
+        ### tray visible False
+        self.tray_icon.setVisible(True)
+        self.tray_icon.setVisible(False)
+
+    ### Chkbox clicked & Close
     def closeEvent(self):
         if self.check_box.isChecked():
-            ### add hiding process_UI
             self.hide()
-            self.tray_icon.show()
+            self.tray_icon.setVisible(True)
+
+            ### show Message - Tray
+            self.tray_icon.showMessage("Kx","Tray Icon has been set")
+            ### processing UI hide set
+            self = proc_self
+            self.hide()
             
         else:
-            exit()
             
- 
- 
+            exit()
+    ### traymenu - execute
+    def active_tray(self):
+        self.tray_icon.setVisible(False)
+        self = proc_self
+        self.show()
+        
+    ### MousePressEvent & MouseMoveEvent = drag window
+    def mousePressEvent(self, event):
+        self.offset = event.pos()
+
+    def mouseMoveEvent(self, event):
+        x=event.globalX()
+        y=event.globalY()
+        x_w = self.offset.x()
+        y_w = self.offset.y()
+        self.move(x-x_w, y-y_w)
+
 if __name__ == "__main__":
 
     app = QApplication(sys.argv)

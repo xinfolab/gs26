@@ -4,7 +4,7 @@ import webbrowser
 import conn
 
 from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import QWidget, QLabel, QApplication, QPushButton, QTextEdit, QMessageBox
+from PyQt5.QtWidgets import QWidget, QLabel, QApplication, QPushButton, QTextEdit, QMessageBox, QLineEdit
 from PyQt5.QtGui import QIcon, QPixmap
 from StartKx import Ui_Info
 
@@ -62,8 +62,9 @@ class Ui_MainWindow(QWidget):
         PW_Label.setFixedSize(50,50)
         PW_Label.move(50,490)
 
-        self.PW_txt = QTextEdit('',self)
+        self.PW_txt = QLineEdit('',self)
         self.PW_txt.setFixedSize(150,30)
+        self.PW_txt.setEchoMode(QLineEdit.Password)
         self.PW_txt.move(120,500)
         self.PW_txt.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
 
@@ -102,7 +103,7 @@ class Ui_MainWindow(QWidget):
 
     def sin_btn_clicked(self):
         self.id = self.ID_txt.toPlainText()
-        self.password = self.PW_txt.toPlainText()
+        self.password = self.PW_txt.text()
 
         login_class = conn.login()
         user_token = login_class.login_start(self.id, self.password)
@@ -115,6 +116,16 @@ class Ui_MainWindow(QWidget):
             self.UI = Ui_Info(self.id, (urlopen('http://ip.42.pl/raw').read()).decode())
             self.UI.show()
 
+    ### MousePressEvent & MouseMoveEvent = drag window
+    def mousePressEvent(self, event):
+        self.offset = event.pos()
+
+    def mouseMoveEvent(self, event):
+        x=event.globalX()
+        y=event.globalY()
+        x_w = self.offset.x()
+        y_w = self.offset.y()
+        self.move(x-x_w, y-y_w)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

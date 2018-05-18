@@ -40,13 +40,13 @@ class Ui_Info(QDialog):
 
         ### Label
         user_id = QLabel('ID :' + self.user_id , self)
-        user_id.setFont(QFont('Arial', 20))
+        user_id.setFont(QFont('Arial', 15))
         user_id.setStyleSheet('color:white')
-        user_id.move(310, 130)
+        user_id.move(220, 140)
         user_ip = QLabel('IP: ' + self.user_ip, self)
-        user_ip.setFont(QFont('Arial', 20))
+        user_ip.setFont(QFont('Arial', 15))
         user_ip.setStyleSheet('color:white')
-        user_ip.move(310, 170)
+        user_ip.move(220, 180)
 
 
         ### Open Report Button
@@ -78,6 +78,16 @@ class Ui_Info(QDialog):
     def report_view(self):
         webbrowser.open("https://www.naver.com")
 
+    ### MousePressEvent & MouseMoveEvent = drag window
+    def mousePressEvent(self, event):
+        self.offset = event.pos()
+
+    def mouseMoveEvent(self, event):
+        x=event.globalX()
+        y=event.globalY()
+        x_w = self.offset.x()
+        y_w = self.offset.y()
+        self.move(x-x_w, y-y_w)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
